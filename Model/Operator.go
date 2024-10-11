@@ -1,8 +1,6 @@
 package Model
 
 import (
-	"Sipanjul/Database"
-	"errors"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -18,5 +16,9 @@ type Operator struct {
 type OperatorLogin struct {
 	Name string `json:"name" binding:"required"`
 	Password string `json:"password" binding:"required"`
+}
+
+func (o *Operator) ValidatePassword(password string) error {
+	return bcrypt.CompareHashAndPassword([]byte(o.Password), []byte(password))
 }
 
