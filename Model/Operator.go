@@ -38,3 +38,17 @@ func FindOperator (name, password string) (string,error) {
 	return Operator.Name, nil
 }
 
+func GetOperator () ([]Operator,error) {
+    var Operator []Operator
+    
+    err := Database.Database.Raw("SELECT * FROM operators)").Scan(&Operator)
+    if err.Error != nil {
+        return Operator, err.Error
+    }
+
+    if err.RowsAffected == 0 {
+        return Operator, errors.New("user not found")
+    }
+
+    return Operator, nil
+}
