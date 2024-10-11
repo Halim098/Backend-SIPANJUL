@@ -1,6 +1,8 @@
 package Model
 
 import (
+	"Sipanjul/Database"
+	"errors"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -20,5 +22,19 @@ type OperatorLogin struct {
 
 func (o *Operator) ValidatePassword(password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(o.Password), []byte(password))
+}
+
+func FindOperator (name, password string) (string,error) {
+	var Operator Operator
+	err := Database.Database.Raw("SELECT * FROM operators WHERE name = ? AND password = ?", name, password).Scan(&Operator)
+	if err.Error != nil {
+		return "", err.Error
+	}
+
+	if err.RowsAffected == 0 {
+		return "", errors.New("user not found")
+	}
+
+	return Operator.Name, nil
 }
 
