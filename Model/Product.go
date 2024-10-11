@@ -29,3 +29,21 @@ func AddProduct (name string, price float64, stock int, division string, locatio
 	return nil
 }
 
+func UpdateProduct (id uint, name string, price float64, stock int, division string, location string) error {
+	Product := Product{ID: id}
+	err := Database.Database.First(&Product)
+	if err.Error != nil {
+		return err.Error
+	}
+	Product.Name = name
+	Product.Price = price
+	Product.Stock = stock
+	Product.Division = division
+	Product.Location = location
+	Product.UpdatedAt = time.Now()
+	err = Database.Database.Save(&Product)
+	if err.Error != nil {
+		return err.Error
+	}
+	return nil
+}
