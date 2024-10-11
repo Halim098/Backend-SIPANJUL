@@ -1,7 +1,11 @@
 package Model
 
 import (
+	"Sipanjul/Database"
+	"errors"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type Operator struct {
@@ -10,3 +14,9 @@ type Operator struct {
     Password  string    `form:"password" json:"password" binding:"required"`
     CreatedAt time.Time `json:"created_at"`
 }
+
+type OperatorLogin struct {
+	Name string `json:"name" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
