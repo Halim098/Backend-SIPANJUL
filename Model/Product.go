@@ -47,3 +47,18 @@ func UpdateProduct (id uint, name string, price float64, stock int, division str
 	}
 	return nil
 }
+
+func DeleteProduct (id uint) error {
+	Product := Product{ID: id}
+	err := Database.Database.First(&Product)
+	if err.Error != nil {
+		return err.Error
+	}
+	Product.Active = "false"
+	Product.DeleteAt = time.Now()
+	err = Database.Database.Save(&Product)
+	if err.Error != nil {
+		return err.Error
+	}
+	return nil
+}
