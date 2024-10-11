@@ -62,3 +62,18 @@ func DeleteProduct (id uint) error {
 	}
 	return nil
 }
+
+func GetProduct () ([]Product,error) {
+	var Product []Product
+	
+	err := Database.Database.Raw("SELECT * FROM products WHERE active = ?", "true").Scan(&Product)
+	if err.Error != nil {
+		return Product, err.Error
+	}
+
+	if err.RowsAffected == 0 {
+		return Product, nil
+	}
+
+	return Product, nil
+}
