@@ -1,17 +1,20 @@
 export const dailySales = {
-  today: 1920000,
-  yesterday: 1650000,
-  percentage: 10,
+  currentValue: 1920000,
+  oldValue: 1650000,
+  percentage: 16.4,
+  isNegative: false,
 }
 
 export const weeklySales = {
-  thisWeek: 13500000,
-  lastWeek: 13440000,
-  percentage: 4,
+  currentValue: 13500000,
+  oldValue: 13440000,
+  percentage: 0.4,
+  isNegative: false,
 }
 
 export const monthlySales = {
-  thisMonth: 57600000,
-  lastMonth: 51250000,
-  percentage: 6,
+  currentValue: 57600000,
+  oldValue: 51250000,
+  percentage: 12.4,
+  isNegative: false,
 }
