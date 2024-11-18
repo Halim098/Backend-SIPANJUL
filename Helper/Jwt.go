@@ -1,6 +1,7 @@
 package Helper
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"time"
@@ -8,16 +9,25 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var privateKey = []byte(os.Getenv("JWT_PRIVATE_KEY"))
+var privateKey = func() []byte {
+    key := os.Getenv("JWT_PRIVATE_KEY")
+    if key == "" {
+        panic("JWT_PRIVATE_KEY is not set in environment variables")
+    }
+    return []byte(key)
+}()
 
 func GenerateJWT(id uint) (string, error) {
-	tokenTTL, _ := strconv.Atoi(os.Getenv("TOKEN_TTL"))
-	claims := jwt.MapClaims{
-		"id":   id,
-		"exp":  time.Now().Add(time.Minute * time.Duration(tokenTTL)).Unix(),
-	}
+    tokenTTL, err := strconv.Atoi(os.Getenv("TOKEN_TTL"))
+    if err != nil || tokenTTL <= 0 {
+        return "", fmt.Errorf("invalid TOKEN_TTL value")
+    }
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+    claims := jwt.MapClaims{
+        "id":  id,
+        "exp": time.Now().Add(time.Minute * time.Duration(tokenTTL)).Unix(),
+    }
 
-	return token.SignedString(privateKey)
+    token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+    return token.SignedString(privateKey)
 }
