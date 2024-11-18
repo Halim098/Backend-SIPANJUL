@@ -5,6 +5,7 @@ import (
 	"Sipanjul/Router"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/joho/godotenv"
 	// Add logger package for GORM
@@ -21,8 +22,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func loadEnv() {
-    err := godotenv.Load()
-    if err != nil {
-        log.Fatal("Error loading .env file")
+    if os.Getenv("VERCEL_ENV") == "" { // VERIFIC ENVIRONMENT VARIABLES ONLY IN LOCAL
+        err := godotenv.Load()
+        if err != nil {
+            log.Println("Warning: .env file not found, using system environment variables")
+        }
     }
 }
