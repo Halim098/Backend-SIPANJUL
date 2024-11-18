@@ -22,19 +22,19 @@ func SetupRouter() *gin.Engine  {
 	r.POST("/register", Service.Register)
 	
 	// Landing Page
-	r.GET("/Inventory",Service.GetAllProduct)
+	r.GET("/inventory",Service.GetAllProduct)
 
 	v1 := r.Group("/v1", Middleware.Auth())
 	{
 		// Inventory
-		v1.GET("/Inventory",Service.GetProductBYOpr)
-		v1.GET("/Inventory/:id", Service.GetProductByID)
-		v1.POST("/Inventory",Service.AddProduct)
-		v1.PUT("/Inventory/:id",Service.UpdateProduct)
-		v1.DELETE("/Inventory",Service.DeleteProduct)
+		v1.GET("/inventory",Service.GetProductBYOpr)
+		v1.GET("/inventory/:id", Service.GetProductByID)
+		v1.POST("/inventory",Service.AddProduct)
+		v1.PUT("/inventory/:id",Service.UpdateProduct)
+		v1.DELETE("/inventory",Service.DeleteProduct)
 
 		// Cashier
-		v1.POST("/Checkout",Service.Checkout)
+		v1.POST("/checkout",Service.Checkout)
 	}
 
 	return r
