@@ -30,7 +30,10 @@ func Login(c *gin.Context)  {
 		return
 	}
 
-	c.JSON(http.StatusAccepted, gin.H{"message":"Login Berhasil", "token":token})
+	c.JSON(http.StatusAccepted, gin.H{
+		"message":"Login Berhasil", 
+		"data": map[string]string{"token": token},
+	})
 }
 
 func Register(c *gin.Context)  {
