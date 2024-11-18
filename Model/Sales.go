@@ -1,6 +1,7 @@
 package Model
 
 import (
+	"Sipanjul/Database"
 	"time"
 
 	_ "gorm.io/gorm"
@@ -13,4 +14,12 @@ type Sales struct {
     Date      time.Time `json:"date"`
     
     Operator  Operator  `gorm:"foreignKey:OprID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"` // Foreign key defined
+}
+
+func AddSales (data *Sales) error {
+	err := Database.Database.Create(&data)
+	if err.Error != nil {
+		return err.Error
+	}
+	return nil
 }
