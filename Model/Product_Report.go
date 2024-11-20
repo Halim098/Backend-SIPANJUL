@@ -2,6 +2,7 @@ package Model
 
 import (
 	"Sipanjul/Database"
+	"errors"
 	"time"
 
 	_ "gorm.io/gorm"
@@ -26,4 +27,21 @@ func AddProductReport (data *ProductReport) error {
 		return err.Error
 	}
 	return nil
+}
+
+func GetProductReport (startdate,enddate,divisi,detail string) ([]ProductReport, error) {
+	var Product []ProductReport
+
+	query := gettingQuery(startdate,enddate,divisi,detail)
+	
+	err := Database.Database.Raw(query).Scan(&Product)
+	if err.Error != nil {
+		return Product, err.Error
+	}
+
+	if err.RowsAffected == 0 {
+		return Product, errors.New("data tidak ditemukan")
+	}
+
+	return Product, nil
 }
