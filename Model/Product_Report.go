@@ -45,3 +45,24 @@ func GetProductReport (startdate,enddate,divisi,detail string) ([]ProductReport,
 
 	return Product, nil
 }
+
+func gettingQuery(startdate,enddate,divisi,detail string) string {
+	if startdate == "" && divisi == "" && detail == "" {
+		return query
+	}
+	query = query + " WHERE "
+	if startdate != "" {
+		if enddate != "" {
+			query = query + "r.date BETWEEN " + startdate + " AND " + enddate + " AND "
+		} else {
+			query = query + "r.date = " + startdate + " AND "
+		}
+	}
+	if divisi != "" {
+		query = query + "p.division = " + divisi + " AND "
+	}
+	if detail != "" {
+		query = query + "r.action = " + detail + " AND "
+	}
+	return query[:len(query)-5]
+}
