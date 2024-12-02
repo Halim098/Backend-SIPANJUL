@@ -21,6 +21,15 @@ type ProductReport struct {
 	Product     Product     `gorm:"foreignKey:ProdID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"` // Foreign key defined
 }
 
+type ProductReportOpr struct {
+    ID        	uint      	`json:"id"`
+    Name      	string    	`json:"name" binding:"required"`
+    Quantity  	int       	`json:"quantity" binding:"required"`
+    Action		string    	`json:"action" binding:"required"`
+    Description	string		`json:"description" binding:"required"`
+    Date 		time.Time 	`json:"date"`
+}
+
 func AddProductReport (data *ProductReport) error {
 	err := Database.Database.Create(&data)
 	if err.Error != nil {
@@ -29,21 +38,33 @@ func AddProductReport (data *ProductReport) error {
 	return nil
 }
 
-func GetProductReport (startdate,enddate,divisi,detail string) ([]ProductReport, error) {
+func GetProductReport (startdate,enddate,divisi,detail string) ([]ProductReportOpr, error) {
 	var Product []ProductReport
+    var ProductOpr []ProductReportOpr
 
 	query := gettingQuery(startdate,enddate,divisi,detail)
 	
 	err := Database.Database.Raw(query).Scan(&Product)
 	if err.Error != nil {
-		return Product, err.Error
+		return ProductOpr, err.Error
 	}
 
 	if err.RowsAffected == 0 {
-		return Product, errors.New("data tidak ditemukan")
+		return ProductOpr, errors.New("data tidak ditemukan")
 	}
 
-	return Product, nil
+    for _, data := range Product {
+        ProductOpr = append(ProductOpr, ProductReportOpr{
+            ID: data.ID,
+            Name: data.Product.Name,
+            Quantity: data.Quantity,
+            Action: data.Action,
+            Description: data.Description,
+            Date: data.Date,
+        })
+    }
+
+	return ProductOpr, nil
 }
 
 func gettingQuery(startdate,enddate,divisi,detail string) string {
