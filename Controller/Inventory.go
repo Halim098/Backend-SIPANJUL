@@ -2,6 +2,7 @@ package Controller
 
 import (
 	"Sipanjul/Model"
+	"time"
 )
 
 func AddProduct(data *Model.Product) error {
@@ -13,6 +14,7 @@ func AddProduct(data *Model.Product) error {
 }
 
 func UpdateProduct(stok, data *Model.Product) error {
+	data.UpdatedAt = time.Now()
 	err := Model.UpdateProduct(stok, data)
 	if err != nil {
 		return err
