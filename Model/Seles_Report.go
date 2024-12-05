@@ -14,6 +14,7 @@ type Sales_Report struct {
 	Terjual  	int       	`json:"terjual" binding:"required"`
 	Price		int    		`json:"hargapenjualan" binding:"required"`
 	Stockakhir	int       	`json:"stockakhir" binding:"required"`
+	Divisi		string		`jspn:"divisi" binding:"required"`
 }
 
 func GetSalesDetail(id uint, startdate, endate string) ([]Sales_Report, error) {
@@ -62,6 +63,7 @@ func GetSalesDetail(id uint, startdate, endate string) ([]Sales_Report, error) {
                 Terjual: v.Quantity,
                 Price: v.Total,
                 Stockakhir: v.StockAkhir,
+				Divisi: v.Product.Division,
             }
         }
     }
