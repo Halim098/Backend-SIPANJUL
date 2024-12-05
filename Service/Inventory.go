@@ -162,3 +162,42 @@ func GetAllProduct(c *gin.Context)  {
 		"data": data,
 	})
 }
+
+func UpdateStock(c *gin.Context) {
+	id := c.MustGet("id").(uint)
+	prodid,err := strconv.ParseUint(c.Param("id"),10,64)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Not Found"})
+		return
+	}
+	prod_id := uint(prodid)
+
+	prod,err := Controller.GetProductByID(prod_id)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "Gagal Update, Produk Tidak Ditemukan"})
+		return
+	}
+
+	if id != prod.OprID {
+		c.JSON(http.StatusForbidden, gin.H{"message": "Access Denied"})
+		return
+	}
+
+	var data map[string]interface{}
+	err = c.ShouldBindJSON(&data)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message":"Gagal Update, Cek Kembali data"})
+		return
+	}
+
+	stock := data["quantity"].(int)
+	description := data["description"].(string)
+
+	err= Controller.UpdateStock(stock,description ,&prod)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Berhasil Merubah Stock %s",prod.Name)})
+}
