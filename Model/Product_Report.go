@@ -67,7 +67,7 @@ func GetProductReport (startdate,enddate,divisi,detail string) ([]ProductReportO
 	return ProductOpr, nil
 }
 
-func gettingQuery(startdate,enddate,divisi,detail string) string {
+func gettingQuery (startdate,enddate,divisi,detail string) string {
 	if startdate == "" && divisi == "" && detail == "" {
 		return query
 	}
