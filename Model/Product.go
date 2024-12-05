@@ -56,7 +56,7 @@ func UpdateProduct (stok *Product, data *Product) error {
 	stok.Division = data.Division
 	stok.Name = data.Name
 	stok.Price = data.Price
-	stok.Stock = stok.Stock + data.Stock
+	stok.Stock = data.Stock
 	stok.UpdatedAt = data.UpdatedAt
 
 	err := Database.Database.Save(&stok)
@@ -80,7 +80,7 @@ func DeleteProduct (product *Product) error {
 	return nil
 }
 
-func GetProductByOpr(opr uint) ([]ProductOperator,error) {
+func GetProductByOpr (opr uint) ([]ProductOperator,error) {
 	var Product []ProductOperator
 	
 	err := Database.Database.Raw("SELECT id, name, price, stock, packagesize, division, imageurl FROM products WHERE active = ? AND opr_id = ?", "true", opr).Scan(&Product)
@@ -95,7 +95,7 @@ func GetProductByOpr(opr uint) ([]ProductOperator,error) {
 	return Product, nil
 }
 
-func GetProductByID(id uint) (Product,error)  {
+func GetProductByID (id uint) (Product,error)  {
 	var Product Product
 
 	err := Database.Database.Raw("SELECT id, name, price, stock, packagesize, division, imageurl, opr_id FROM products WHERE active = ? AND id = ?", "true", id).Scan(&Product)
@@ -110,7 +110,7 @@ func GetProductByID(id uint) (Product,error)  {
 	return Product, nil
 }
 
-func GetAllProduct()([]Product,error){
+func GetAllProduct ()([]Product,error){
 	var Product []Product
 	
 	err := Database.Database.Raw("SELECT id, name, stock, packagesize, division, imageurl FROM products WHERE active = ? ", "true").Scan(&Product)
@@ -125,7 +125,7 @@ func GetAllProduct()([]Product,error){
 	return Product, nil
 }
 
-func GetCheckoutProduct() ([]Product,error) {
+func GetCheckoutProduct () ([]Product,error) {
 	var Product []Product
 
 	err := Database.Database.Raw("SELECT * FROM products WHERE active = ? ", "true").Scan(&Product)
@@ -138,4 +138,12 @@ func GetCheckoutProduct() ([]Product,error) {
 	}
 
 	return Product, nil
+}
+
+func UpdateStock (id uint, stock int) error {
+	err := Database.Database.Exec("UPDATE products SET stock = ? WHERE id = ?", stock, id)
+	if err.Error != nil {
+		return err.Error
+	}
+	return nil
 }
