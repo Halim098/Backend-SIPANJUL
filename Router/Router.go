@@ -24,7 +24,7 @@ func SetupRouter() *gin.Engine  {
 	// Landing Page
 	r.GET("/inventory",Service.GetAllProduct)
 
-	v1 := r.Group("/v1", Middleware.Auth())
+	v1 := r.Group("/opr", Middleware.Auth())
 	{
 		// Inventory
 		v1.GET("/inventory",Service.GetProductBYOpr)
@@ -32,6 +32,8 @@ func SetupRouter() *gin.Engine  {
 		v1.POST("/inventory",Service.AddProduct)
 		v1.PUT("/inventory/:id",Service.UpdateProduct)
 		v1.DELETE("/inventory",Service.DeleteProduct)
+		v1.POST("/stock/:id",Service.UpdateStock)
+		v1.POST("/report",Service.GetReport)
 
 		// Cashier
 		v1.POST("/checkout",Service.Checkout)
