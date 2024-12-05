@@ -74,3 +74,12 @@ func GetAllProduct() ([]Model.ProductUser, error) {
 
 	return newProd, nil
 }
+
+func UpdateStock(data *Model.Product, stock int) error {
+	data.Stock = data.Stock + stock
+	err := Model.UpdateStock(data.ID, data.Stock)
+	if err != nil {
+		return err
+	}
+	return nil
+}
