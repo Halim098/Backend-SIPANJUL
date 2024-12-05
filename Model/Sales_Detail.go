@@ -33,9 +33,9 @@ func GetSalesDetailbySalesandDate (idsales uint,sartdate,endate string) ([]Sales
 
 	err := Database.Database.Raw(`SELECT 
             sd.*, 
-            s.date AS sales_date, 
-            p.division AS product_division, 
-            p.name AS product_name
+            s.date, 
+            p.division, 
+            p.name
         FROM 
             sales_details sd
         JOIN 
