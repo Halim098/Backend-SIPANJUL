@@ -57,7 +57,7 @@ func UpdateProduct (stok *Product, data *Product) error {
 	stok.Name = data.Name
 	stok.Price = data.Price
 	stok.Stock = stok.Stock + data.Stock
-	stok.UpdatedAt = time.Now()
+	stok.UpdatedAt = data.UpdatedAt
 
 	err := Database.Database.Save(&stok)
 	if err.Error != nil {
