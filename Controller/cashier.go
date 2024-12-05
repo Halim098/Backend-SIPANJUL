@@ -25,19 +25,10 @@ func Checkout(oprid uint, total int, detail *[]Model.Sales_Detail) error {
 			return err
 		}
 
-		updated := Model.Product{
-			Division: prodData.Division,
-			Name: prodData.Name,
-			Price: prodData.Price,
-			Stock: -v.Quantity,
-			UpdatedAt: prodData.UpdatedAt,
-		}
-
-		err = Model.UpdateProduct(&prodData, &updated)
+		err = Model.UpdateStock(v.ProdID, v.StockAkhir)
 		if err != nil {
 			return err
 		}
-	
 	}
 	return nil
 }
