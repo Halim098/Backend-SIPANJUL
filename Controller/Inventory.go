@@ -75,11 +75,32 @@ func GetAllProduct() ([]Model.ProductUser, error) {
 	return newProd, nil
 }
 
-func UpdateStock(data *Model.Product, stock int) error {
-	data.Stock = data.Stock + stock
-	err := Model.UpdateStock(data.ID, data.Stock)
+func UpdateStock(stock int, desk string, prod *Model.Product) error {
+	quantity := prod.Stock + stock
+	err := Model.UpdateStock(prod.ID, quantity)
 	if err != nil {
 		return err
 	}
+
+	var action string
+	if stock < 0 {
+		action = "Pengurangan"
+	} else {
+		action = "Penambahan"
+	}
+
+	report := Model.ProductReport{
+		ProdID: prod.ID,
+		Quantity: stock,
+		Action: action,
+		Description: desk,
+		Date: time.Now(),
+	}
+
+	err = Model.AddProductReport(&report)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
