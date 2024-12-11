@@ -14,7 +14,8 @@ type Sales_Report struct {
 	Terjual  	int       	`json:"terjual" binding:"required"`
 	Price		int    		`json:"hargapenjualan" binding:"required"`
 	Stockakhir	int       	`json:"stockakhir" binding:"required"`
-	Divisi		string		`jspn:"divisi" binding:"required"`
+	Divisi		string		`json:"divisi" binding:"required"`
+	Date		time.Time	`json:"date" binding:"required"`
 }
 
 func GetSalesDetail(id uint, startdate, endate string) ([]Sales_Report, error) {
@@ -38,21 +39,22 @@ func GetSalesDetail(id uint, startdate, endate string) ([]Sales_Report, error) {
 
     for _, v := range data {
         if existing, found := saleMap[v.Product.Name]; found {
-			// Jika produk dengan nama ini sudah ada, tambahkan kuantitas
+			
 			existing.Price += v.Total
 			saleMap[v.Product.Name] = existing
+			existing.Terjual += v.Quantity
 
-            if v.Sales.Date.Equal(start) {
-                if v.StockAwal > existing.Stockawal {
-                    existing.Stockawal = v.StockAwal
-                }
-            }
-
-            if v.Sales.Date.Equal(end) {
-                if v.StockAkhir < existing.Stockakhir {
-                    existing.Stockakhir = v.StockAkhir
-                }
-            }
+            if v.Sales.Date.Format("2006-01-02") == start.Format("2006-01-02") {
+				if v.Sales.Date.Before(existing.Date) {
+					existing.Stockawal = v.StockAwal
+				}
+			}
+			
+			if v.Sales.Date.Format("2006-01-02") == end.Format("2006-01-02") {
+				if v.Sales.Date.After(existing.Date) {
+					existing.Stockakhir = v.StockAkhir
+				}
+			}
 
 		} else {
             saleMap[v.Product.Name] = Sales_Report{
@@ -64,6 +66,7 @@ func GetSalesDetail(id uint, startdate, endate string) ([]Sales_Report, error) {
                 Price: v.Total,
                 Stockakhir: v.StockAkhir,
 				Divisi: v.Product.Division,
+				Date: v.Sales.Date,
             }
         }
     }
