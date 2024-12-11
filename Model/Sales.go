@@ -17,6 +17,9 @@ type Sales struct {
 }
 
 func AddSales (data *Sales) error {
+	originalTime := time.Now()
+	formattedTime, _ := time.Parse("2006-01-02 15:04:05", originalTime.Format("2006-01-02 15:04:05"))
+	data.Date = formattedTime
 	err := Database.Database.Create(&data)
 	if err.Error != nil {
 		return err.Error
