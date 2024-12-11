@@ -11,7 +11,7 @@ import (
 type Product struct {
     ID        	uint      	`gorm:"primarykey" json:"id"`
     Name      	string    	`json:"name" binding:"required"`
-    Price     	float64   	`json:"price" binding:"required"`
+    Price     	int		   	`json:"price" binding:"required"`
     Stock     	int       	`json:"stock" binding:"required"`
 	Packagesize	string		`json:"packagesize" binding:"required"`
 	Division  	string		`json:"division" binding:"required"`
@@ -36,7 +36,7 @@ type ProductUser struct {
 type ProductOperator struct {
     ID        	uint      	`json:"id"`
     Name      	string    	`json:"name" binding:"required"`
-    Price     	float64   	`json:"price" binding:"required"`
+    Price     	int		   	`json:"price" binding:"required"`
     Stock     	int       	`json:"stock" binding:"required"`
     Packagesize	string		`json:"packagesize" binding:"required"`
     Division  	string		`json:"division" binding:"required"`
