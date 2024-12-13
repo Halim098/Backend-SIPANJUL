@@ -18,7 +18,7 @@ func AddProduct(c *gin.Context) {
 
 	err := c.BindJSON(&data)
 	if err != nil {
-		c.JSON(http.StatusBadRequest,gin.H{"massage" : err.Error()})
+		c.JSON(http.StatusBadRequest,gin.H{"status":"fail","massage" : err.Error()})
 		return
 	}
 
@@ -28,82 +28,82 @@ func AddProduct(c *gin.Context) {
 
 	err = Controller.AddProduct(&data)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": err})
+		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message": err.Error()})
 		return
 	}
 
 	massage := fmt.Sprintf("Product %s berhasil ditambahkan",data.Name)
-	c.JSON(http.StatusOK, gin.H{"massage":massage})
+	c.JSON(http.StatusOK, gin.H{"status":"success","massage":massage})
 }
 
 func UpdateProduct(c *gin.Context) {
 	id := c.MustGet("id").(uint)
 	prodid,err := strconv.ParseUint(c.Param("id"),10,64)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": "Not Found"})
+		c.JSON(http.StatusNotFound, gin.H{"status":"fail","message": "Not Found"})
 		return
 	}
 	prod_id := uint(prodid)
 	
 	prod,err := Controller.GetProductByID(prod_id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": "Gagal Update, Produk Tidak Ditemukan"})
+		c.JSON(http.StatusNotFound, gin.H{"status":"fail","message": "Gagal Update, Produk Tidak Ditemukan"})
 		return
 	}
 
 	if id != prod.OprID {
-		c.JSON(http.StatusForbidden, gin.H{"message": "Access Denied"})
+		c.JSON(http.StatusForbidden, gin.H{"status":"fail","message": "Access Denied"})
 		return
 	}
 
 	data := Model.Product{}
 	err = c.ShouldBindJSON(&data)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message":"Gagal Update, Cek Kembali data"})
+		c.JSON(http.StatusBadRequest, gin.H{"status":"fail","message":"Gagal Update, Cek Kembali data"})
 		return
 	}
 
 	err = Controller.UpdateProduct(&prod, &data)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": err})
+		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Data %s Berhasil Diupdate",data.Name)})
+	c.JSON(http.StatusOK, gin.H{"status":"success","message": fmt.Sprintf("Data %s Berhasil Diupdate",data.Name)})
 }
 
 func DeleteProduct(c *gin.Context) {
 	id := c.MustGet("id").(uint)
 	prodid,err := strconv.ParseUint(c.Param("id"),10,64)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": "Not Found"})
+		c.JSON(http.StatusNotFound, gin.H{"status":"fail","message": "Not Found"})
 		return
 	}
 	prod_id := uint(prodid)
 
 	prod,err := Controller.GetProductByID(prod_id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": "Gagal Delete, Produk Tidak Ditemukan"})
+		c.JSON(http.StatusNotFound, gin.H{"status":"fail","message": "Gagal Delete, Produk Tidak Ditemukan"})
 		return
 	}
 
 	if id != prod.OprID {
-		c.JSON(http.StatusForbidden, gin.H{"message": "Akses Ditolak"})
+		c.JSON(http.StatusForbidden, gin.H{"status":"fail","message": "Akses Ditolak"})
 		return
 	}
 
 	data := Model.Product{}
 	err = c.ShouldBindJSON(&data)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message":"Gagal Delete, Cek Kembali data"})
+		c.JSON(http.StatusBadRequest, gin.H{"status":"fail","message":"Gagal Delete, Cek Kembali data"})
 		return
 	}
 
 	err = Controller.DeleteProduct(&data)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": err})
+		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Data %s Berhasil Dihapus",data.Name)})
+	c.JSON(http.StatusOK, gin.H{"status":"success","message": fmt.Sprintf("Data %s Berhasil Dihapus",data.Name)})
 }
 
 func GetProductBYOpr(c *gin.Context)  {
@@ -111,11 +111,12 @@ func GetProductBYOpr(c *gin.Context)  {
 
 	produk,err := Controller.GetProductBYOpr(id)
 	if err != nil {
-		c.JSON(http.StatusNotFound,gin.H{"message":"Data Tidak Ada"})
+		c.JSON(http.StatusNotFound,gin.H{"status":"fail","message":"Data Tidak Ada"})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
+			"status":"success",
 			"message":"Berthasil Mengambil Data",
 			"data" : produk,
 		},
@@ -126,23 +127,24 @@ func GetProductByID(c *gin.Context){
 	id := c.MustGet("id").(uint)
 	prodid,err := strconv.ParseUint(c.Param("id"),10,64)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": "Not Found"})
+		c.JSON(http.StatusNotFound, gin.H{"status":"fail","message": "Not Found"})
 		return
 	} 
 	prod_id := uint(prodid)
 
 	product,err := Controller.GetProductByID(prod_id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		c.JSON(http.StatusNotFound, gin.H{"status":"fail","message": err.Error()})
 		return
 	}
 
 	if product.OprID != id {
-		c.JSON(http.StatusForbidden, gin.H{"message": "Akses Ditolak"})
+		c.JSON(http.StatusForbidden, gin.H{"status":"fail","message": "Akses Ditolak"})
 		return
 	}
 
 	c.JSON(http.StatusOK,gin.H{
+		"status":"success",
 		"message": "Sukses Mengambil Data",
 		"data": product,
 	})
@@ -151,13 +153,12 @@ func GetProductByID(c *gin.Context){
 func GetAllProduct(c *gin.Context)  {
 	data, err := Controller.GetAllProduct()
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": "Data Tidak ditemukan"})
+		c.JSON(http.StatusNotFound, gin.H{"status":"fail","message": "Data Tidak ditemukan"})
 		return
 	}
 
-	
-
 	c.JSON(http.StatusOK,gin.H{
+		"status":"success",
 		"message": "Sukses Mengambil Data",
 		"data": data,
 	})
@@ -167,26 +168,26 @@ func UpdateStock(c *gin.Context) {
 	id := c.MustGet("id").(uint)
 	prodid,err := strconv.ParseUint(c.Param("id"),10,64)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": "Not Found"})
+		c.JSON(http.StatusNotFound, gin.H{"status":"fail","message": "Not Found"})
 		return
 	}
 	prod_id := uint(prodid)
 
 	prod,err := Controller.GetProductByID(prod_id)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message": "Gagal Update, Produk Tidak Ditemukan"})
+		c.JSON(http.StatusNotFound, gin.H{"status":"fail","message": "Gagal Update, Produk Tidak Ditemukan"})
 		return
 	}
 
 	if id != prod.OprID {
-		c.JSON(http.StatusForbidden, gin.H{"message": "Access Denied"})
+		c.JSON(http.StatusForbidden, gin.H{"status":"fail","message": "Access Denied"})
 		return
 	}
 
 	var data map[string]interface{}
 	err = c.ShouldBindJSON(&data)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message":"Gagal Update, Cek Kembali data"})
+		c.JSON(http.StatusBadRequest, gin.H{"status":"fail","message":"Gagal Update, Cek Kembali data"})
 		return
 	}
 
@@ -195,9 +196,9 @@ func UpdateStock(c *gin.Context) {
 
 	err= Controller.UpdateStock(stock,description ,&prod)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": err})
+		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Berhasil Merubah Stock %s",prod.Name)})
+	c.JSON(http.StatusOK, gin.H{"status":"success","message": fmt.Sprintf("Berhasil Merubah Stock %s",prod.Name)})
 }

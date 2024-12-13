@@ -14,23 +14,24 @@ func Login(c *gin.Context)  {
 
 	err := c.BindJSON(&data)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message":"Periksa Kembali Data"})
+		c.JSON(http.StatusBadRequest, gin.H{"status":"fail","message":"Periksa Kembali Data"})
 		return
 	} 
 
 	id, err := Controller.Login(data.Name, data.Password)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"message":"Username atau Password Salah"})
+		c.JSON(http.StatusNotFound, gin.H{"status":"fail","message":"Username atau Password Salah"})
 		return
 	}
 
 	token,err := Helper.GenerateJWT(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message":err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message":err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusAccepted, gin.H{
+		"status":"success",
 		"message":"Login Berhasil", 
 		"data": map[string]string{"token": token},
 	})
@@ -41,20 +42,20 @@ func Register(c *gin.Context)  {
 
 	err := c.BindJSON(&data)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Periksa Kembali Data"})
+		c.JSON(http.StatusBadRequest, gin.H{"status":"fail","message": "Periksa Kembali Data"})
 		return
 	}
 
 	if data.Name == "" || data.Password == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"message":"Data Tidak Boleh Kosong"})
+		c.JSON(http.StatusBadRequest, gin.H{"status":"fail","message":"Data Tidak Boleh Kosong"})
 		return
 	}
 
 	err = Controller.Register(&data)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message":err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message":err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message":"Akun Berhasil Dibuat"})
+	c.JSON(http.StatusCreated, gin.H{"status":"success","message":"Akun Berhasil Dibuat"})
 }

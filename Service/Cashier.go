@@ -15,13 +15,13 @@ func Checkout(c *gin.Context)  {
 
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Transaksi Gagal: Check Kembali Data"})
+		c.JSON(http.StatusBadRequest, gin.H{"status":"fail","message": "Transaksi Gagal: Check Kembali Data"})
 		return
 	}
 
 	stock, err := Model.GetCheckoutProduct()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError , gin.H{"message": "Transaksi Gagal: Gagal Mengambil data dari server"})
+		c.JSON(http.StatusInternalServerError , gin.H{"status":"fail","message": "Transaksi Gagal: Gagal Mengambil data dari server"})
 		return
 	}
 
@@ -32,7 +32,7 @@ func Checkout(c *gin.Context)  {
 			if v.ProdID == s.ID {
 				if v.Quantity < s.Stock {
 					reason := fmt.Sprintf("Transaksi Gagal: Stock barang %s tidak mencukupi",v.Product.Name)
-					c.JSON(http.StatusBadRequest, gin.H{"message": reason})
+					c.JSON(http.StatusBadRequest, gin.H{"status":"fail","message": reason})
 					return
 				}
 			}
@@ -42,9 +42,9 @@ func Checkout(c *gin.Context)  {
 
 	err = Controller.Checkout(id, total, &data)
 	if err!= nil {
-		c.JSON(http.StatusInternalServerError , gin.H{"message": err})
+		c.JSON(http.StatusInternalServerError , gin.H{"status":"fail","message": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK,gin.H{"message": "Transaksi Berhasil"})
+	c.JSON(http.StatusOK,gin.H{"status":"success","message": "Transaksi Berhasil"})
 }
