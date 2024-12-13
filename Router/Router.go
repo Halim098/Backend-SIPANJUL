@@ -34,6 +34,7 @@ func SetupRouter() *gin.Engine  {
 		v1.DELETE("/inventory",Service.DeleteProduct)
 		v1.POST("/stock/:id",Service.UpdateStock)
 		v1.POST("/report",Service.GetReport)
+		v1.POST("/Print",Service.Print)
 
 		// Cashier
 		v1.POST("/checkout",Service.Checkout)
