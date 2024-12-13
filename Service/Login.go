@@ -20,7 +20,7 @@ func Login(c *gin.Context)  {
 
 	id, err := Controller.Login(data.Name, data.Password)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"status":"fail","message":"Username atau Password Salah"})
+		c.JSON(http.StatusUnauthorized, gin.H{"status":"fail","message":"Username atau Password Salah"})
 		return
 	}
 
@@ -30,7 +30,7 @@ func Login(c *gin.Context)  {
 		return
 	}
 
-	c.JSON(http.StatusAccepted, gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"status":"success",
 		"message":"Login Berhasil", 
 		"data": map[string]string{"token": token},
