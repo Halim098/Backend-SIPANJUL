@@ -35,6 +35,7 @@ func SetupRouter() *gin.Engine  {
 		v1.POST("/stock/:id",Service.UpdateStock)
 		v1.POST("/report",Service.GetReport)
 		v1.POST("/Print",Service.Print)
+		v1.GET("/statistik",Service.Statistik)
 
 		// Cashier
 		v1.POST("/checkout",Service.Checkout)
