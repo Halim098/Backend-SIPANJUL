@@ -20,6 +20,17 @@ type Sales_Detail struct {
 	Sales     Sales     `gorm:"foreignKey:SalesID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"` // Foreign key defined
 }
 
+type BestSelling struct {
+	Name string `json:"name"`
+}
+
+type LastTransaction struct {
+	Name string `json:"name"`
+	Kuantitas int `json:"kuantitas"`
+	Total int `json:"total"`
+	Date string `json:"date"`
+}
+
 func AddSalesDetail (data *Sales_Detail) error {
 	err := Database.Database.Create(&data)
 	if err.Error != nil {
@@ -57,3 +68,60 @@ func GetSalesDetailbySalesandDate (idsales uint,sartdate,endate string) ([]Sales
 	return Sales, nil
 }
 
+func GetLastTransaction (oprid uint) ([]LastTransaction, error) {
+	var LastTrans []LastTransaction
+
+	err := Database.Database.Raw(`SELECT 
+			p.name, 
+			sd.quantity, 
+			sd.total, 
+			s.date
+		FROM 
+			sales_details sd
+		JOIN 
+			sales s ON sd.sales_id = s.id
+		JOIN 
+			products p ON sd.prod_id = p.id
+		WHERE 
+			s.opr_id = ?
+		ORDER BY 
+			s.date DESC
+		LIMIT 5`, oprid).Scan(&LastTrans)
+	if err.Error != nil {
+		return LastTrans, err.Error
+	}
+
+	if err.RowsAffected == 0 {
+		return LastTrans, errors.New("data tidak ditemukan")
+	}
+
+	return LastTrans, nil
+}
+
+func GetBestSellingItem(oprid uint) ([]BestSelling, error) {
+	var BestSelling []BestSelling
+
+	err := Database.Database.Raw(`SELECT 
+			p.name
+		FROM 
+			sales_details sd
+		JOIN 
+			products p ON sd.prod_id = p.id
+		JOIN 
+			sales s ON sd.sales_id = s.id
+		WHERE 
+			s.opr_id = ?
+		GROUP BY 
+			p.name
+		ORDER BY 
+			SUM(sd.quantity) DESC`, oprid).Scan(&BestSelling)
+	if err.Error != nil {
+		return BestSelling, err.Error
+	}
+
+	if err.RowsAffected == 0 {
+		return BestSelling, errors.New("data tidak ditemukan")
+	}
+
+	return BestSelling, nil
+}

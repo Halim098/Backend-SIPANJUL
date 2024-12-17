@@ -31,9 +31,8 @@ func Login(c *gin.Context)  {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"status":"success",
-		"message":"Login Berhasil", 
-		"data": map[string]string{"token": token},
+		"status":"success", 
+		"message": map[string]string{"token": token},
 	})
 }
 
