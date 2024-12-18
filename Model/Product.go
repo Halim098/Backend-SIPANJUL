@@ -80,25 +80,27 @@ func UpdateProduct (stok *Product, data *Product) error {
 	return nil
 }
 
-func DeleteProduct (id uint) error {
+func DeleteProduct(id uint) error {
     var product Product
-	err := Database.Database.Raw("SELECT * FROM products opr_id = ?", id).Scan(&product)
-	if err.Error != nil {
-		return err.Error
-	}
 
-	if err.RowsAffected == 0 {
-		return errors.New("data tidak ditemukan")
-	}
-    
-	product.Active = "false"
-	product.DeleteAt = time.Now()
-	err = Database.Database.Save(&product)
-	if err.Error != nil {
-		return err.Error
-	}
-	return nil
+    result := Database.Database.Raw("SELECT * FROM products WHERE id = ?", id).Scan(&product)
+    if result.Error != nil {
+        return result.Error
+    }
+    if result.RowsAffected == 0 {
+        return errors.New("data tidak ditemukan")
+    }
+
+    product.Active = "false"
+    product.DeleteAt = time.Now() 
+    err := Database.Database.Save(&product)
+    if err.Error != nil {
+        return err.Error
+    }
+
+    return nil
 }
+
 
 func GetProductByOpr (opr uint) ([]ProductOperator,error) {
 	var Product []ProductOperator
