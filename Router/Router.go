@@ -18,8 +18,8 @@ func SetupRouter() *gin.Engine  {
 		ExposeHeaders: []string{"Content-Length"},
 	}))
 
-	r.POST("/login", Service.Login)
-	r.POST("/register", Service.Register)
+	r.POST("/login", Service.Login) // done
+	r.POST("/register", Service.Register) // done
 	
 	//guest
 	r.GET("/product",Service.GetAllProduct)
@@ -30,10 +30,10 @@ func SetupRouter() *gin.Engine  {
 	v1 := r.Group("/opr", Middleware.Auth())
 	{
 		//Home
-		v1.POST("/store-status",Service.UpdateStoreStatus)
-		v1.GET("/sales-report",Service.GetSalesReport)
-		v1.GET("/recent-transaction",Service.GetLastTransaction)
-		v1.GET("/bestselling-product",Service.GetBestSellingItem)
+		v1.POST("/store-status",Service.UpdateStoreStatus) //done
+		v1.GET("/sales-report",Service.GetSalesReport) // done
+		v1.GET("/recent-transaction",Service.GetLastTransaction) // done
+		v1.GET("/bestselling-product",Service.GetBestSellingItem) // done
 
 		// Cashier
 		v1.POST("/checkout",Service.Checkout)

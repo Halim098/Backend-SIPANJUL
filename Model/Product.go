@@ -105,7 +105,7 @@ func DeleteProduct(id uint) error {
 func GetProductByOpr (opr uint) ([]ProductOperator,error) {
 	var Product []ProductOperator
 	
-	err := Database.Database.Raw("SELECT id, name, price, stock, packagesize, division, imageurl FROM products WHERE active = ? AND opr_id = ?", "true", opr).Scan(&Product)
+	err := Database.Database.Raw("SELECT id, name, price, stock, packagesize, division, imageurl,type FROM products WHERE active = ? AND opr_id = ?", "true", opr).Scan(&Product)
 	if err.Error != nil {
 		return Product, err.Error
 	}

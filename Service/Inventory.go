@@ -190,15 +190,18 @@ func UpdateStock(c *gin.Context) {
 		return
 	}
 
-	stock := data["quantity"].(int)
-	description := data["description"].(string)
+	stock := data["stock"].(float64)
+	description := data["desc"].(string)
 	isNegative := data["isNegative"].(bool)
 
+	// float64 to int
+	stocknew := int(stock)
+
 	if isNegative {
-		stock = stock * -1
+		stocknew = stocknew * -1
 	}
 
-	err= Controller.UpdateStock(stock,description ,&prod)
+	err= Controller.UpdateStock(stocknew,description ,&prod)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message": err.Error()})
 		return
