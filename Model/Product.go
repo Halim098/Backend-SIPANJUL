@@ -82,7 +82,7 @@ func UpdateProduct (stok *Product, data *Product) error {
 
 func DeleteProduct (id uint) error {
     var product Product
-	err := Database.Database.Raw("SELECT * FROM products opr_id = ?", "true", id).Scan(&product)
+	err := Database.Database.Raw("SELECT * FROM products opr_id = ?", id).Scan(&product)
 	if err.Error != nil {
 		return err.Error
 	}
