@@ -190,6 +190,11 @@ func UpdateStock(c *gin.Context) {
 
 	stock := data["quantity"].(int)
 	description := data["description"].(string)
+	isNegative := data["isNegative"].(bool)
+
+	if isNegative {
+		stock = stock * -1
+	}
 
 	err= Controller.UpdateStock(stock,description ,&prod)
 	if err != nil {

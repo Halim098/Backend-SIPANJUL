@@ -14,6 +14,7 @@ type Product struct {
     Price     	int		   	`json:"price" binding:"required"`
     Stock     	int       	`json:"stock" binding:"required"`
 	Packagesize	string		`json:"packagesize" binding:"required"`
+    Type 		string      `json:"type" binding:"required"`
 	Division  	string		`json:"division" binding:"required"`
 	Imageurl	string		`json:"image_url" binding:"required"`
 	OprID	  	uint	    `json:"opr_id"`
@@ -29,6 +30,7 @@ type ProductUser struct {
     ID        	uint      	`json:"id"`
     Name      	string    	`json:"name" binding:"required"`
     Stock     	bool       	`json:"stock" binding:"required"`
+	Type 		string      `json:"type" binding:"required"`
 	Packagesize	string		`json:"packagesize" binding:"required"`
 	Imageurl	string		`json:"image_url" binding:"required"`
 }
@@ -38,6 +40,7 @@ type ProductOperator struct {
     Name      	string    	`json:"name" binding:"required"`
     Price     	int		   	`json:"price" binding:"required"`
     Stock     	int       	`json:"stock" binding:"required"`
+    Type 		string      `json:"type" binding:"required"`
     Packagesize	string		`json:"packagesize" binding:"required"`
     Division  	string		`json:"division" binding:"required"`
     Imageurl	string		`json:"image_url" binding:"required"`
@@ -56,7 +59,9 @@ func UpdateProduct (stok *Product, data *Product) error {
 	stok.Division = data.Division
 	stok.Name = data.Name
 	stok.Price = data.Price
-	stok.Stock = data.Stock
+    stok.Packagesize = data.Packagesize
+    stok.Type = data.Type
+    stok.Imageurl = data.Imageurl
 	stok.UpdatedAt = data.UpdatedAt
 
 	err := Database.Database.Save(&stok)

@@ -67,6 +67,7 @@ func GetAllProduct() ([]Model.ProductUser, error) {
 			ID: v.ID,
 			Name: v.Name,
 			Stock: ready,
+			Type: v.Type,
 			Packagesize: v.Packagesize,
 			Imageurl: v.Imageurl,
 		})
