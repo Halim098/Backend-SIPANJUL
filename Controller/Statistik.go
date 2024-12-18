@@ -43,32 +43,32 @@ func Statistik(id uint) ([]Model.Statistik,[]Model.Statistik,[]Model.Statistik,[
 
 	for _, v := range dataharian {
 		statistik = Model.Statistik{
-			Komoditi : v.Komoditi,
-			Harga : v.Price,
+			Name : v.Komoditi,
+			TotalPenjualan : v.Price,
 		}
 		harian = append(harian, statistik)
 	}
 
 	for _, v := range datamingguan {
 		statistik = Model.Statistik{
-			Komoditi : v.Komoditi,
-			Harga : v.Price,
+			Name : v.Komoditi,
+			TotalPenjualan : v.Price,
 		}
 		mingguan = append(mingguan, statistik)
 	}
 
 	for _, v := range databulanan {
 		statistik = Model.Statistik{
-			Komoditi : v.Komoditi,
-			Harga : v.Price,
+			Name : v.Komoditi,
+			TotalPenjualan : v.Price,
 		}
 		bulanan = append(bulanan, statistik)
 	}
 
 	for _, v := range datatahunan {
 		statistik = Model.Statistik{
-			Komoditi : v.Komoditi,
-			Harga : v.Price,
+			Name : v.Komoditi,
+			TotalPenjualan : v.Price,
 		}
 		tahunan = append(tahunan, statistik)
 	}

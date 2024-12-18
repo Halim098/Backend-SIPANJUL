@@ -1,7 +1,7 @@
 package Model
 
 type Statistik struct {
-	Komoditi string `json:"komoditi"`
-	Harga int `json:"harga"`
+	Name string `json:"name"`
+	TotalPenjualan int `json:"totalPenjualan"`
 }
 
