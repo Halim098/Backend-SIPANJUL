@@ -21,7 +21,12 @@ type Sales_Detail struct {
 }
 
 type BestSelling struct {
+	ID uint `json:"id"`
 	Name string `json:"name"`
+	Stock bool `json:"stock"`
+	Packagesize string `json:"packagesize"`
+	Types string `json:"type"`
+	Imageurl string `json:"imageurl"`
 }
 
 type LastTransaction struct {
@@ -98,11 +103,16 @@ func GetLastTransaction (oprid uint) ([]LastTransaction, error) {
 	return LastTrans, nil
 }
 
-func GetBestSellingItem(oprid uint) ([]BestSelling, error) {
-	var BestSelling []BestSelling
+func GetBestSellingItem(oprid uint) ([]Sales_Detail, error) {
+	var BestSelling []Sales_Detail
 
 	err := Database.Database.Raw(`SELECT 
-			p.name
+			p.id,
+			p.name,
+			p.packagesize,
+			p.type,
+			p.imageurl,
+			p,stock
 		FROM 
 			sales_details sd
 		JOIN 
@@ -114,7 +124,7 @@ func GetBestSellingItem(oprid uint) ([]BestSelling, error) {
 		GROUP BY 
 			p.name
 		ORDER BY 
-			SUM(sd.quantity) DESC`, oprid).Scan(&BestSelling)
+			SUM(sd.quantity) DESC LIMIT 10`, oprid).Scan(&BestSelling)
 	if err.Error != nil {
 		return BestSelling, err.Error
 	}
