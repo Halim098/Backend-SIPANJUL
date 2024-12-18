@@ -11,7 +11,8 @@ import (
 
 func Checkout(c *gin.Context)  {
 	id := c.MustGet("id").(uint)
-	data := []Model.Sales_Detail{}
+	data := Model.Checkout{}
+	checkout := []Model.Sales_Detail{}
 
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
@@ -25,22 +26,28 @@ func Checkout(c *gin.Context)  {
 		return
 	}
 
-	total := 0
-
-	for _, v := range data {
+	for _, v := range data.Items {
 		for _, s := range stock {
-			if v.ProdID == s.ID {
+			if v.ID == s.ID {
 				if v.Quantity < s.Stock {
-					reason := fmt.Sprintf("Transaksi Gagal: Stock barang %s tidak mencukupi",v.Product.Name)
+					reason := fmt.Sprintf("Transaksi Gagal: Stock barang %s tidak mencukupi",v.Name)
 					c.JSON(http.StatusBadRequest, gin.H{"status":"fail","message": reason})
 					return
 				}
+				checkout = append(checkout, Model.Sales_Detail{
+					SalesID: id,
+					ProdID: v.ID,
+					Quantity: v.Quantity,
+					StockAwal: s.Stock,
+					StockAkhir: s.Stock - v.Quantity,
+					Total: v.Price,
+				})
 			}
 		}
-		total += v.Total
 	}
 
-	err = Controller.Checkout(id, total, &data)
+
+	err = Controller.Checkout(id, data.TotalAmount, &checkout)
 	if err!= nil {
 		c.JSON(http.StatusInternalServerError , gin.H{"status":"fail","message": err.Error()})
 		return

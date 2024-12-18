@@ -12,14 +12,6 @@ func Checkout(oprid uint, total int, detail *[]Model.Sales_Detail) error {
 	}
 
 	for _, v := range *detail {
-		v.SalesID = data.ID
-		prodData, err := GetProductByID(v.ProdID)
-		if err != nil {
-			return err
-		}
-		v.StockAwal = prodData.Stock
-		v.StockAkhir = v.StockAwal - v.Quantity
-
 		err = Model.AddSalesDetail(&v)
 		if err != nil {
 			return err
