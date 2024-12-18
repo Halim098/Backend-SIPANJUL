@@ -13,12 +13,21 @@ type Operator struct {
     ID        uint      `gorm:"primarykey" json:"id"`
     Name  string    `gorm:"unique;not null" form:"name" json:"name"` 
     Password  string    `form:"password" json:"password"`
+    Status    string    `json:"status"`
     CreatedAt time.Time `json:"created_at"`
 }
 
 type OperatorLogin struct {
 	Name string `json:"name" binding:"required"`
 	Password string `json:"password" binding:"required"`
+}
+
+type StatusStore struct {
+    Status string `json:"status"`
+}
+
+type NameOperator struct {
+    Name string `json:"name"`
 }
 
 func (o *Operator) ValidatePassword(password string) error {
@@ -47,6 +56,7 @@ func (o *Operator) Save() error {
 	}
 
 	o.CreatedAt = time.Now()
+    o.Status = "tutup"
 
 	err = Database.Database.Exec("INSERT INTO operators (name, password, created_at) VALUES (?, ?, ?)", o.Name, o.Password, o.CreatedAt).Error
 	if err != nil {
@@ -70,3 +80,38 @@ func FindOperatorByName(username string) (Operator, error) {
 	return opr, nil
 }
 
+func FindOperatorByID(id uint) (NameOperator, error) {
+	var opr NameOperator
+	err := Database.Database.Raw("SELECT name FROM operators WHERE id = ?", id).Scan(&opr)
+	if err.Error != nil {
+		return NameOperator{}, err.Error
+	}
+
+	if err.RowsAffected == 0 {
+		return NameOperator{}, errors.New("user not found")
+	}
+
+	return opr, nil
+}
+
+func UpdateOperatorStatus(id uint, status string) error {
+    err := Database.Database.Exec("UPDATE operators SET status = ? WHERE id = ?", status, id).Error
+    if err != nil {
+        return errors.New("failed to update status")
+    }
+    return nil
+}
+
+func GetStatus(id uint) (StatusStore, error) {
+    var status StatusStore
+    err := Database.Database.Raw("SELECT status FROM operators WHERE id = ?", id).Scan(&status)
+    if err.Error != nil {
+        return StatusStore{}, err.Error
+    }
+
+    if err.RowsAffected == 0 {
+        return StatusStore{}, errors.New("data not found")
+    }
+
+    return status, nil
+}

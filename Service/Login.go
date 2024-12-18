@@ -4,6 +4,7 @@ import (
 	"Sipanjul/Controller"
 	"Sipanjul/Helper"
 	"Sipanjul/Model"
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -58,4 +59,49 @@ func Register(c *gin.Context)  {
 	}
 
 	c.JSON(http.StatusCreated, gin.H{"status":"success","message":"Akun Berhasil Dibuat"})
+}
+
+func VerifyToken(c *gin.Context)  {
+	id := c.MustGet("id").(uint)
+
+	name,err := Controller.VerifyToken(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message":err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status":"success","message":name})
+}
+
+func GetStoreStatus(c *gin.Context)  {
+	id := c.MustGet("id").(uint)
+
+	data,err := Controller.GetStatusStore(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message":err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"statua":"success","message":data})
+}
+
+func UpdateStoreStatus(c *gin.Context)  {
+	id := c.MustGet("id").(uint)
+	data := Model.StatusStore{}
+	
+	err := c.BindJSON(&data)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status":"fail","message":"Periksa Kembali Data"})
+		return
+	}
+
+	err = Controller.UpdateStatusStore(id, data.Status)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message":err.Error()})
+		return
+	}
+
+	message := fmt.Sprintf("Status Toko Berhasil Diubah Menjadi %s",data.Status)
+
+	c.JSON(http.StatusOK, gin.H{"status":"success","message":message})
 }

@@ -27,3 +27,30 @@ func Register(regis *Model.Operator) error{
 
 	return nil
 }
+
+func GetStatusStore(id uint) (string,error){
+	data,err := Model.GetStatus(id)
+	if err != nil {
+		return "", errors.New("data tidak ditemukan")
+	}
+
+	return data.Status,nil
+}
+
+func UpdateStatusStore(id uint, status string) error{
+	err := Model.UpdateOperatorStatus(id,status)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func VerifyToken(id uint) (string,error){
+	data,err := Model.FindOperatorByID(id)
+	if err != nil {
+		return "", errors.New("data tidak ditemukan")
+	}
+
+	return data.Name,nil
+}

@@ -77,3 +77,4 @@ func GetSalesDetail(id uint, startdate, endate string) ([]Sales_Report, error) {
 
     return Sales, nil
 }
+
