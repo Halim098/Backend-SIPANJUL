@@ -29,7 +29,7 @@ func Checkout(c *gin.Context)  {
 	for _, v := range data.Items {
 		for _, s := range stock {
 			if v.ID == s.ID {
-				if v.Quantity < s.Stock {
+				if v.Quantity > s.Stock {
 					reason := fmt.Sprintf("Transaksi Gagal: Stock barang %s tidak mencukupi",v.Name)
 					c.JSON(http.StatusBadRequest, gin.H{"status":"fail","message": reason})
 					return
