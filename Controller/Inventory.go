@@ -22,8 +22,8 @@ func UpdateProduct(stok, data *Model.Product) error {
 	return nil
 }
 
-func DeleteProduct(data *Model.Product) error {
-	err := Model.DeleteProduct(data)
+func DeleteProduct(id uint) error {
+	err := Model.DeleteProduct(id)
 	if err != nil {
 		return err
 	}

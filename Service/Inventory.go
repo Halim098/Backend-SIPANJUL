@@ -100,19 +100,12 @@ func DeleteProduct(c *gin.Context) {
 		return
 	}
 
-	data := Model.Product{}
-	err = c.ShouldBindJSON(&data)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status":"fail","message":"Gagal Delete, Cek Kembali data"})
-		return
-	}
-
-	err = Controller.DeleteProduct(&data)
+	err = Controller.DeleteProduct(prod_id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status":"success","message": fmt.Sprintf("Data %s Berhasil Dihapus",data.Name)})
+	c.JSON(http.StatusOK, gin.H{"status":"success","message": fmt.Sprintf("Data %s Berhasil Dihapus",prod.Name)})
 }
 
 func GetProductBYOpr(c *gin.Context)  {

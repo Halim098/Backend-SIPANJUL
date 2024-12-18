@@ -80,11 +80,17 @@ func UpdateProduct (stok *Product, data *Product) error {
 	return nil
 }
 
-func DeleteProduct (product *Product) error {
-	err := Database.Database.First(&product)
+func DeleteProduct (id uint) error {
+    var product Product
+	err := Database.Database.Raw("SELECT * FROM products opr_id = ?", "true", id).Scan(&product)
 	if err.Error != nil {
 		return err.Error
 	}
+
+	if err.RowsAffected == 0 {
+		return errors.New("data tidak ditemukan")
+	}
+    
 	product.Active = "false"
 	product.DeleteAt = time.Now()
 	err = Database.Database.Save(&product)
