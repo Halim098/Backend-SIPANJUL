@@ -44,7 +44,7 @@ func SetupRouter() *gin.Engine  {
 		v1.POST("/product",Service.AddProduct)
 		v1.PUT("/product/:id",Service.UpdateProduct)
 		v1.PUT("/product/update-stock/:id",Service.UpdateStock)
-		v1.DELETE("/product",Service.DeleteProduct)
+		v1.DELETE("/product/:id",Service.DeleteProduct)
 
 
 		// Report

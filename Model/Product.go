@@ -112,7 +112,7 @@ func GetProductByOpr (opr uint) ([]ProductOperator,error) {
 func GetProductByID (id uint) (Product,error)  {
 	var Product Product
 
-	err := Database.Database.Raw("SELECT id, name, price, stock, packagesize, division, imageurl, opr_id FROM products WHERE active = ? AND id = ?", "true", id).Scan(&Product)
+	err := Database.Database.Raw("SELECT id, name, price, stock, packagesize, division, imageurl, opr_id, created_at, active FROM products WHERE active = ? AND id = ?", "true", id).Scan(&Product)
 	if err.Error != nil {
 		return Product, err.Error
 	}
