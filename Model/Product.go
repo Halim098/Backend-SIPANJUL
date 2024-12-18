@@ -46,6 +46,15 @@ type ProductOperator struct {
     Imageurl	string		`json:"image_url" binding:"required"`
 }
 
+type ProductUpdate struct {
+    Name      	string    	`json:"name" binding:"required"`
+    Price     	int		   	`json:"price" binding:"required"`
+    Type 		string      `json:"type" binding:"required"`
+    Packagesize	string		`json:"packagesize" binding:"required"`
+    Division  	string		`json:"division" binding:"required"`
+    Imageurl	string		`json:"image_url" binding:"required"`
+}
+
 func AddProduct (data *Product) error {
 	data.Active = "true"
 	err := Database.Database.Create(&data)

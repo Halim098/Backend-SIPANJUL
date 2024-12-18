@@ -56,14 +56,23 @@ func UpdateProduct(c *gin.Context) {
 		return
 	}
 
-	data := Model.Product{}
+	data := Model.ProductUpdate{}
 	err = c.ShouldBindJSON(&data)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status":"fail","message":"Gagal Update, Cek Kembali data"})
 		return
 	}
 
-	err = Controller.UpdateProduct(&prod, &data)
+	newdata := Model.Product{
+		Name: data.Name,
+		Price: data.Price,
+		Type: data.Type,
+		Packagesize: data.Packagesize,
+		Division: data.Division,
+		Imageurl: data.Imageurl,
+	}
+
+	err = Controller.UpdateProduct(&prod, &newdata)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message": err.Error()})
 		return
