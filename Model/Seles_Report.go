@@ -1,6 +1,7 @@
 package Model
 
 import (
+	"log"
 	"time"
 
 	_ "gorm.io/gorm"
@@ -31,42 +32,46 @@ func GetSalesDetail(id uint, startdate, endate string) ([]Sales_Report, error) {
     if err != nil {
         return Sales, err
     }
+
+	end = end.AddDate(0, 0, 1)
+
+	endstring := end.Format("2006-01-02")
     
-    data, err := GetSalesDetailbySalesandDate(id, startdate, endate)
+    data, err := GetSalesDetailbySalesandDate(id, startdate, endstring)
     if err != nil {
         return Sales, err
     }
 
     for _, v := range data {
-        if existing, found := saleMap[v.Product.Name]; found {
+        if existing, found := saleMap[v.Name]; found {
 			
 			existing.Price += v.Total
-			saleMap[v.Product.Name] = existing
+			saleMap[v.Name] = existing
 			existing.Terjual += v.Quantity
 
-            if v.Sales.Date.Format("2006-01-02") == start.Format("2006-01-02") {
-				if v.Sales.Date.Before(existing.Date) {
+            if v.Date.Format("2006-01-02") == start.Format("2006-01-02") {
+				if v.Date.Before(existing.Date) {
 					existing.Stockawal = v.StockAwal
 				}
 			}
 			
-			if v.Sales.Date.Format("2006-01-02") == end.Format("2006-01-02") {
-				if v.Sales.Date.After(existing.Date) {
+			if v.Date.Format("2006-01-02") == end.Format("2006-01-02") {
+				if v.Date.After(existing.Date) {
 					existing.Stockakhir = v.StockAkhir
 				}
 			}
 
 		} else {
-            saleMap[v.Product.Name] = Sales_Report{
+            saleMap[v.Name] = Sales_Report{
                 ID: v.ID,
                 SalesID: v.SalesID,
                 Stockawal: v.StockAwal,
-                Komoditi: v.Product.Name,
+                Komoditi: v.Name,
                 Terjual: v.Quantity,
                 Price: v.Total,
                 Stockakhir: v.StockAkhir,
-				Divisi: v.Product.Division,
-				Date: v.Sales.Date,
+				Divisi: v.Division,
+				Date: v.Date,
             }
         }
     }
@@ -74,6 +79,8 @@ func GetSalesDetail(id uint, startdate, endate string) ([]Sales_Report, error) {
     for _, v := range saleMap {
         Sales = append(Sales, v)
     }
+
+	log.Println(Sales)
 
     return Sales, nil
 }

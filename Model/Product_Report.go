@@ -74,7 +74,7 @@ func gettingQuery (startdate,enddate,divisi,detail string) string {
 	query = query + " WHERE "
 	if startdate != "" {
 		if enddate != "" {
-			query = query + "r.date BETWEEN " + startdate + " AND " + enddate + " AND "
+			query = query + "r.date >= " + startdate + " AND r.date <=" + enddate + " AND "
 		} else {
 			query = query + "r.date = " + startdate + " AND "
 		}

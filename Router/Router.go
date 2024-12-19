@@ -30,32 +30,29 @@ func SetupRouter() *gin.Engine  {
 	v1 := r.Group("/opr", Middleware.Auth())
 	{
 		//Home
-		v1.POST("/store-status",Service.UpdateStoreStatus) //done
-		v1.GET("/sales-report",Service.GetSalesReport) // done
-		v1.GET("/recent-transaction",Service.GetLastTransaction) // done
-		v1.GET("/bestselling-product",Service.GetBestSellingItem) // done
+		v1.POST("/store-status",Service.UpdateStoreStatus) 
+		v1.GET("/sales-report",Service.GetSalesReport) 
+		v1.GET("/recent-transaction",Service.GetLastTransaction) 
+		v1.GET("/bestselling-product",Service.GetBestSellingItem) 
 
 		// Cashier
-		v1.POST("/checkout",Service.Checkout)
+		v1.POST("/checkout",Service.Checkout) // done
 
 		// Inventory
-		v1.GET("/product",Service.GetProductBYOpr)
+		v1.GET("/product",Service.GetProductBYOpr) // done
 		v1.GET("/product/:id", Service.GetProductByID) // ?????????????
-		v1.POST("/product",Service.AddProduct)
-		v1.PUT("/product/:id",Service.UpdateProduct)
-		v1.PUT("/product/update-stock/:id",Service.UpdateStock)
-		v1.DELETE("/product/:id",Service.DeleteProduct)
+		v1.POST("/product",Service.AddProduct) // done
+		v1.PUT("/product/:id",Service.UpdateProduct) // done
+		v1.PUT("/product/update-stock/:id",Service.UpdateStock) // done
+		v1.DELETE("/product/:id",Service.DeleteProduct) // done
 
 
 		// Report
-		v1.POST("/report",Service.GetReport)
+		v1.POST("/report",Service.GetReport) 
 		v1.POST("/print-report",Service.Print)
 
 		// Statistik
-		v1.GET("/statistik",Service.Statistik)
-
-		// Cashier
-		v1.POST("/sales-statistic",Service.Checkout)
+		v1.GET("/sales-statistic",Service.Statistik) // done
 	}
 
 	return r

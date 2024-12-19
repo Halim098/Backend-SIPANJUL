@@ -5,3 +5,4 @@ type Statistik struct {
 	TotalPenjualan int `json:"totalPenjualan"`
 }
 
+
