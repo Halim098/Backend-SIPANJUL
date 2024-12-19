@@ -123,7 +123,7 @@ func DataPrint(startdate, enddate string, oprid uint) ([]Print, []PrintOut, erro
 
 		FROM product_reports r
 		JOIN products p ON r.prod_id = p.id
-		WHERE r.date >= ? AND r.date < ? AND r.opr_id = ?`, startdate, enddate, oprid).Scan(&out)
+		WHERE r.date >= ? AND r.date < ? AND p.opr_id = ?`, startdate, enddate, oprid).Scan(&out)
 
 		if err.Error != nil {
 			errOut = err.Error
