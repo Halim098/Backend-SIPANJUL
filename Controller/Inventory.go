@@ -85,9 +85,9 @@ func UpdateStock(stock int, desk string, prod *Model.Product) error {
 
 	var action string
 	if stock < 0 {
-		action = "Pengurangan"
+		action = "pengurangan"
 	} else {
-		action = "Penambahan"
+		action = "penambahan"
 	}
 
 	report := Model.ProductReport{
