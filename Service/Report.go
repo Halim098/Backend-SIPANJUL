@@ -83,36 +83,56 @@ func Print(c *gin.Context) {
     }
 
     divisi, ok := data["divisi"].(string)
-    if !ok || divisi == "" {
+    if !ok  {
         c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid or missing 'divisi'"})
         return
     }
 
     selesreport, err := Controller.GetSelesReport(startdate, enddate, divisi, id)
     if err != nil {
+
         c.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": err.Error()})
         return
     }
 
-    newdate, err := time.Parse("2006-01-02", enddate)
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": "Invalid end date format. Use 'YYYY-MM-DD'"})
-        return
-    }
+	newend,err := time.Parse("2006-01-02", enddate)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message": err.Error()})
+		return
+	}
 
-    newdate = newdate.AddDate(0, 0, 1)
-    enddate2 := newdate.Format("2006-01-02")
-    productreport, err := Controller.GetProductReport(startdate, enddate2, divisi, "")
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": err.Error()})
-        return
-    }
+	newend = newend.AddDate(0, 0, 1)
+	enddate = newend.Format("2006-01-02")
+
+	productreport, err := Controller.GetProductReport(startdate, enddate, divisi, "")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": err.Error()})
+		return
+	}
 
     datas, dataOut, err := Controller.GenerateDataExcel(selesreport, productreport)
     if err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": "Failed to generate Excel data"})
         return
     }
+
+	for _, v := range datas {
+		fmt.Println("komoditi",v.Komoditi)
+		fmt.Println("stockawal",v.StockAwal)
+		fmt.Println("terjual",v.Terjual)
+		fmt.Println("hasil",v.Hasil)
+		fmt.Println("kemasan",v.Kemasan)
+		fmt.Println("harga",v.Harga)
+		fmt.Println("stocktambahan",v.StockTambahan)
+		fmt.Println("sisa",v.Sisa)
+		fmt.Println("hasil",v.Hasil)
+	}
+
+	for _, v := range dataOut {
+		fmt.Println("komoditi",v.Komoditi)
+		fmt.Println("deskripsi",v.Deskripsi)
+		fmt.Println("jumlah",v.Jumlah)
+	}
 
     fileBytes, err := Controller.GenerateExcelPenjualan(datas, dataOut)
     if err != nil {

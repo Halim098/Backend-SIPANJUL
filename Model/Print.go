@@ -21,49 +21,45 @@ func DataPrint (salesReport []Sales_Report, productReport []ProductReportOpr) ([
 	var data []Print
 	var dataOut []PrintOut
 
-	for _, s := range salesReport {
-		data = append(data, Print{
-			Komoditi: s.Komoditi,
-			StockAwal: s.Stockawal,
-			Terjual: s.Terjual,
-			Hasil: s.Price,
-		})
-	}
-
-	allProduct,err := GetAllProduct()
+	stock,err := GetAllProduct()
 	if err != nil {
 		return nil, nil, err
 	}
 
-	for _, a := range allProduct {
-		for i, d := range data {
-			if a.Name == d.Komoditi {
-				data[i].Kemasan = a.Packagesize
-				data[i].Harga = a.Price
-				data[i].Sisa = a.Stock
+	for _, v := range salesReport{
+		var temp Print
+		temp.Komoditi = v.Komoditi
+		temp.Terjual = v.Terjual
+		temp.StockAwal = v.Stockawal
+		temp.Sisa = v.Stockakhir
+		temp.Hasil = v.Price
+		data = append(data, temp)
+	}
+
+	for _, v := range stock {
+		for i , val := range data {
+			if v.Name == val.Komoditi {
+				data[i].Kemasan = v.Packagesize
+				data[i].Harga = v.Price
 			}
 		}
 	}
 
-	for i, d := range data {
-		for _, p := range productReport {
-			if d.Komoditi == p.Name {
-				if p.Action == "Masuk" {
-					data[i].StockTambahan =+ p.Quantity
+	for _, v := range productReport {
+		for i, val := range data {
+			if v.Name == val.Komoditi {
+				if v.Action == "penambahan" {
+					data[i].StockTambahan = v.Quantity
+				}
+				if v.Action == "pengurangan" {
+					var temp PrintOut
+					temp.Komoditi = v.Name
+					temp.Deskripsi = v.Description
+					temp.Jumlah = v.Quantity
+					dataOut = append(dataOut, temp)
 				}
 			}
 		}
 	}
-
-	for _, p := range productReport {
-		if p.Action == "Keluar" {
-			dataOut = append(dataOut, PrintOut{
-				Komoditi: p.Name,
-				Deskripsi: p.Description,
-				Jumlah: p.Quantity,
-			})
-		}
-	}
-
 	return data, dataOut, nil
 }
