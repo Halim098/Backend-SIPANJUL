@@ -47,8 +47,8 @@ func GetSelesReport(startdate,enddate,divisi string, id uint) ([]Model.Sales_Rep
 	return data,nil
 }
 
-func GenerateDataExcel(salesReport []Model.Sales_Report, productReport []Model.ProductReportOpr) ([]Model.Print, []Model.PrintOut, error){
-	data, dataOut, err := Model.DataPrint(salesReport, productReport)
+func GenerateDataExcel(startdate, enddate string, id uint) ([]Model.Print, []Model.PrintOut, error){
+	data, dataOut, err := Model.DataPrint(startdate, enddate, id)
 	if err != nil {
 		return nil, nil, err
 	}
