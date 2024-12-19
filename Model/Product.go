@@ -135,7 +135,7 @@ func GetProductByID (id uint) (Product,error)  {
 func GetAllProduct ()([]Product,error){
 	var Product []Product
 	
-	err := Database.Database.Raw("SELECT id, name, stock, packagesize, division, imageurl FROM products WHERE active = ? ", "true").Scan(&Product)
+	err := Database.Database.Raw("SELECT id, name, stock, packagesize, division, imageurl,type FROM products WHERE active = ? ", "true").Scan(&Product)
 	if err.Error != nil {
 		return Product, err.Error
 	}
