@@ -118,8 +118,8 @@ func DataPrint(startdate, enddate string, oprid uint) ([]Print, []PrintOut, erro
 		SELECT
 		p.name as komoditi,
 		r.action as action,
-		SUM(r.quantity) as quantity,
-		r.description as description,
+		r.quantity as quantity,
+		r.description as description
 
 		FROM product_reports r
 		JOIN products p ON r.prod_id = p.id
