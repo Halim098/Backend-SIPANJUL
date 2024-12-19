@@ -93,7 +93,7 @@ func Print(c *gin.Context) {
 
     datas, dataOut, err := Controller.GenerateDataExcel(startdate, enddate, id)
     if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": "Failed to generate Excel data"})
+        c.JSON(http.StatusInternalServerError, gin.H{"status": "fail", "message": err.Error()})
         return
     }
 
