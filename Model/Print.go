@@ -208,7 +208,7 @@ func DataPrint(startdate, enddate string, oprid uint) ([]Print, []PrintOut, erro
 	}
 
 	for _, v := range out {
-		if v.Action == "pengeluaran" {
+		if v.Action == "pengurangan" {
 			var p PrintOut
 			p.Komoditi = v.Komoditi
 			p.Deskripsi = v.Description
