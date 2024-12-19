@@ -68,7 +68,7 @@ func DataPrint(startdate, enddate string, oprid uint) ([]Print, []PrintOut, erro
 		err := Database.Database.Raw(`
 		SELECT
 		name as komoditi,
-		packaging as kemasan,
+		packagesize as kemasan,
 		price as harga,
 		stock as stock
 
