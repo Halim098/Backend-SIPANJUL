@@ -36,7 +36,7 @@ func GetReport(c *gin.Context) {
 		return
 	}
 
-	if typedata == "perubahan stok" {
+	if typedata == "perubahan" {
 		newend,err := time.Parse("2006-01-02", enddate)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message": err.Error()})
