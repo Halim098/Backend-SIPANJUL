@@ -24,11 +24,12 @@ func SetupRouter() *gin.Engine  {
 	//guest
 	r.GET("/product",Service.GetAllProduct)
 	r.GET("/store-status",Service.GetStoreStatus)
-	r.GET("/verify-token",Service.VerifyToken)
-
+	
 	// Operator
 	v1 := r.Group("/opr", Middleware.Auth())
 	{
+		v1.GET("/verify-token",Service.VerifyToken) //done
+		
 		//Home
 		v1.POST("/store-status",Service.UpdateStoreStatus) 
 		v1.GET("/sales-report",Service.GetSalesReport) // done

@@ -13,7 +13,7 @@ type Operator struct {
     ID        uint      `gorm:"primarykey" json:"id"`
     Name  string    `gorm:"unique;not null" form:"name" json:"name"` 
     Password  string    `form:"password" json:"password"`
-    Status    string    `json:"status"`
+    Status    bool    `json:"status"`
     CreatedAt time.Time `json:"created_at"`
 }
 
@@ -23,7 +23,7 @@ type OperatorLogin struct {
 }
 
 type StatusStore struct {
-    Status string `json:"status"`
+    Status bool `json:"status"`
 }
 
 type NameOperator struct {
@@ -56,7 +56,7 @@ func (o *Operator) Save() error {
 	}
 
 	o.CreatedAt = time.Now()
-    o.Status = "tutup"
+    o.Status = false
 
 	err = Database.Database.Exec("INSERT INTO operators (name, password, created_at) VALUES (?, ?, ?)", o.Name, o.Password, o.CreatedAt).Error
 	if err != nil {
@@ -94,7 +94,7 @@ func FindOperatorByID(id uint) (NameOperator, error) {
 	return opr, nil
 }
 
-func UpdateOperatorStatus(id uint, status string) error {
+func UpdateOperatorStatus(id uint, status bool) error {
     err := Database.Database.Exec("UPDATE operators SET status = ? WHERE id = ?", status, id).Error
     if err != nil {
         return errors.New("failed to update status")

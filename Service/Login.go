@@ -4,7 +4,6 @@ import (
 	"Sipanjul/Controller"
 	"Sipanjul/Helper"
 	"Sipanjul/Model"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -82,7 +81,7 @@ func GetStoreStatus(c *gin.Context)  {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"statua":"success","message":data})
+	c.JSON(http.StatusOK, gin.H{"statua":"success","storestatus":data})
 }
 
 func UpdateStoreStatus(c *gin.Context)  {
@@ -101,7 +100,12 @@ func UpdateStoreStatus(c *gin.Context)  {
 		return
 	}
 
-	message := fmt.Sprintf("Status Toko Berhasil Diubah Menjadi %s",data.Status)
+	if  !data.Status {
+		message := "Toko Berhasil Ditutup"
+		c.JSON(http.StatusOK, gin.H{"status":"success","message":message})
+		return
+	}
 
+	message := "Toko Berhasil Dibuka"
 	c.JSON(http.StatusOK, gin.H{"status":"success","message":message})
 }

@@ -28,16 +28,16 @@ func Register(regis *Model.Operator) error{
 	return nil
 }
 
-func GetStatusStore(id uint) (string,error){
+func GetStatusStore(id uint) (bool,error){
 	data,err := Model.GetStatus(id)
 	if err != nil {
-		return "", errors.New("data tidak ditemukan")
+		return data.Status, errors.New("data tidak ditemukan")
 	}
 
 	return data.Status,nil
 }
 
-func UpdateStatusStore(id uint, status string) error{
+func UpdateStatusStore(id uint, status bool) error{
 	err := Model.UpdateOperatorStatus(id,status)
 	if err != nil {
 		return err
