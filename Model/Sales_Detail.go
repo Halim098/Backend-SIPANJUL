@@ -32,7 +32,7 @@ type BestSelling struct {
 
 type LastTransaction struct {
 	Name string `json:"name"`
-	Kuantitas int `json:"kuantitas"`
+	Quantity int `json:"quantity"`
 	Total int `json:"total"`
 	Date string `json:"date"`
 }

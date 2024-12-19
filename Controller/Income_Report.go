@@ -123,9 +123,16 @@ func IncomeReport(id uint) (Model.IncomeReport, Model.IncomeReport, Model.Income
 		} else {
 			harian.IsNegative = true
 		}
+		
 		if harian.OldValue != 0 {
 			persentase = float64(harian.CurrentValue-harian.OldValue) / float64(harian.OldValue) * 100
+			if persentase < 0 {
+				persentase = persentase * -1
+			}
+		} else {
+			persentase = 100 // atau nilai default lain
 		}
+		
 		harian.Percentage = persentase
 	}()
 	go func() {
@@ -135,9 +142,16 @@ func IncomeReport(id uint) (Model.IncomeReport, Model.IncomeReport, Model.Income
 		} else {
 			mingguan.IsNegative = true
 		}
+		
 		if mingguan.OldValue != 0 {
 			persentase = float64(mingguan.CurrentValue-mingguan.OldValue) / float64(mingguan.OldValue) * 100
+			if persentase < 0 {
+				persentase = persentase * -1
+			}
+		} else {
+			persentase = 100 // atau nilai default lain
 		}
+		
 		mingguan.Percentage = persentase
 	}()
 	go func() {
@@ -147,9 +161,16 @@ func IncomeReport(id uint) (Model.IncomeReport, Model.IncomeReport, Model.Income
 		} else {
 			bulanan.IsNegative = true
 		}
+		
 		if bulanan.OldValue != 0 {
 			persentase = float64(bulanan.CurrentValue-bulanan.OldValue) / float64(bulanan.OldValue) * 100
+			if persentase < 0 {
+				persentase = persentase * -1
+			}
+		} else {
+			persentase = 100 // atau nilai default lain
 		}
+		
 		bulanan.Percentage = persentase
 	}()
 

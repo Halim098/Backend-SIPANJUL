@@ -31,7 +31,7 @@ func SetupRouter() *gin.Engine  {
 	{
 		//Home
 		v1.POST("/store-status",Service.UpdateStoreStatus) 
-		v1.GET("/sales-report",Service.GetSalesReport) 
+		v1.GET("/sales-report",Service.GetSalesReport) // done
 		v1.GET("/recent-transaction",Service.GetLastTransaction) 
 		v1.GET("/bestselling-product",Service.GetBestSellingItem) 
 
@@ -49,7 +49,7 @@ func SetupRouter() *gin.Engine  {
 
 		// Report
 		v1.POST("/report",Service.GetReport) // done
-		v1.POST("/print-report",Service.Print) 
+		v1.POST("/print-report",Service.Print) // done
 
 		// Statistik
 		v1.GET("/sales-statistic",Service.Statistik) // done
