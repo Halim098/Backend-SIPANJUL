@@ -3,6 +3,7 @@ package Service
 import (
 	"Sipanjul/Controller"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -36,6 +37,15 @@ func GetReport(c *gin.Context) {
 	}
 
 	if typedata == "perubahan stok" {
+		newend,err := time.Parse("2006-01-02", enddate)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message": err.Error()})
+			return
+		}
+
+		newend = newend.AddDate(0, 0, 1)
+		enddate = newend.Format("2006-01-02")
+		
 		data, err := Controller.GetProductReport(startdate, enddate, divisi, detail)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message": err.Error()})

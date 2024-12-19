@@ -48,8 +48,8 @@ func SetupRouter() *gin.Engine  {
 
 
 		// Report
-		v1.POST("/report",Service.GetReport) 
-		v1.POST("/print-report",Service.Print)
+		v1.POST("/report",Service.GetReport) // done
+		v1.POST("/print-report",Service.Print) 
 
 		// Statistik
 		v1.GET("/sales-statistic",Service.Statistik) // done

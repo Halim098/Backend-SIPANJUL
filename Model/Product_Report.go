@@ -3,12 +3,11 @@ package Model
 import (
 	"Sipanjul/Database"
 	"errors"
+	"strings"
 	"time"
 
 	_ "gorm.io/gorm"
 )
-
-var query string = "SELECT r.id, p.name, r.quantity, r.action, r.description r.date FROM product_reports r JOIN products p ON r.prod_id = p.id"
 
 type ProductReport struct {
 	ID        	uint      	`gorm:"primarykey" json:"id"`
@@ -39,51 +38,58 @@ func AddProductReport (data *ProductReport) error {
 }
 
 func GetProductReport (startdate,enddate,divisi,detail string) ([]ProductReportOpr, error) {
-	var Product []ProductReport
-    var ProductOpr []ProductReportOpr
+	var Product []ProductReportOpr
 
 	query := gettingQuery(startdate,enddate,divisi,detail)
 	
 	err := Database.Database.Raw(query).Scan(&Product)
 	if err.Error != nil {
-		return ProductOpr, err.Error
+		return Product, err.Error
 	}
 
 	if err.RowsAffected == 0 {
-		return ProductOpr, errors.New("data tidak ditemukan")
+		return Product, errors.New("data tidak ditemukan")
 	}
 
-    for _, data := range Product {
-        ProductOpr = append(ProductOpr, ProductReportOpr{
-            ID: data.ID,
-            Name: data.Product.Name,
-            Quantity: data.Quantity,
-            Action: data.Action,
-            Description: data.Description,
-            Date: data.Date,
-        })
-    }
-
-	return ProductOpr, nil
+	return Product, nil
 }
 
-func gettingQuery (startdate,enddate,divisi,detail string) string {
-	if startdate == "" && divisi == "" && detail == "" {
-		return query
-	}
-	query = query + " WHERE "
+func gettingQuery(startdate, enddate, divisi, detail string) string {
+	query := `
+        SELECT 
+            r.id, 
+            p.name, 
+            r.quantity, 
+            r.action, 
+            r.description, 
+            r.date 
+        FROM 
+            product_reports r 
+        JOIN 
+            products p 
+        ON 
+            r.prod_id = p.id 
+    `
+
+	conditions := []string{}
+
 	if startdate != "" {
 		if enddate != "" {
-			query = query + "r.date >= " + startdate + " AND r.date <=" + enddate + " AND "
+			conditions = append(conditions, "r.date >= '"+startdate+"' AND r.date < '"+enddate+"'")
 		} else {
-			query = query + "r.date = " + startdate + " AND "
+			conditions = append(conditions, "r.date = '"+startdate+"'")
 		}
 	}
 	if divisi != "" {
-		query = query + "p.division = " + divisi + " AND "
+		conditions = append(conditions, "p.division = '"+divisi+"'")
 	}
 	if detail != "" {
-		query = query + "r.action = " + detail + " AND "
+		conditions = append(conditions, "r.action = '"+detail+"'")
 	}
-	return query[:len(query)-5]
+
+	if len(conditions) > 0 {
+		query += " WHERE " + strings.Join(conditions, " AND ")
+	}
+
+	return query
 }
