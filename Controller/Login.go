@@ -31,10 +31,10 @@ func Register(regis *Model.Operator) error{
 func GetStatusStore(id uint) (bool,error){
 	data,err := Model.GetStatus(id)
 	if err != nil {
-		return data.Status, errors.New("data tidak ditemukan")
+		return data.Storestatus, errors.New("data tidak ditemukan")
 	}
 
-	return data.Status,nil
+	return data.Storestatus,nil
 }
 
 func UpdateStatusStore(id uint, status bool) error{

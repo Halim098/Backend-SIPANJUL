@@ -23,7 +23,7 @@ type OperatorLogin struct {
 }
 
 type StatusStore struct {
-    Status bool `json:"status"`
+    Storestatus bool `json:"storestatus,omitempty"`
 }
 
 type NameOperator struct {
@@ -104,7 +104,7 @@ func UpdateOperatorStatus(id uint, status bool) error {
 
 func GetStatus(id uint) (StatusStore, error) {
     var status StatusStore
-    err := Database.Database.Raw("SELECT status FROM operators WHERE id = ?", id).Scan(&status)
+    err := Database.Database.Raw("SELECT status as storestatus FROM operators WHERE id = ?", id).Scan(&status)
     if err.Error != nil {
         return StatusStore{}, err.Error
     }

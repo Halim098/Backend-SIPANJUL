@@ -5,6 +5,7 @@ import (
 	"Sipanjul/Helper"
 	"Sipanjul/Model"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -73,9 +74,15 @@ func VerifyToken(c *gin.Context)  {
 }
 
 func GetStoreStatus(c *gin.Context)  {
-	id := c.MustGet("id").(uint)
+	id,err := strconv.ParseUint(c.Param("id"),10,64)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"status":"fail","message": "Not Found"})
+		return
+	}
 
-	data,err := Controller.GetStatusStore(id)
+	idUser := uint(id)
+
+	data,err := Controller.GetStatusStore(idUser)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message":err.Error()})
 		return
@@ -94,18 +101,16 @@ func UpdateStoreStatus(c *gin.Context)  {
 		return
 	}
 
-	err = Controller.UpdateStatusStore(id, data.Status)
+	err = Controller.UpdateStatusStore(id, data.Storestatus)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message":err.Error()})
 		return
 	}
 
-	if  !data.Status {
-		message := "Toko Berhasil Ditutup"
-		c.JSON(http.StatusOK, gin.H{"status":"success","message":message})
+	if data.Storestatus {
+		c.JSON(http.StatusOK, gin.H{"status":"success","message":"Toko Dibuka"})
 		return
 	}
 
-	message := "Toko Berhasil Dibuka"
-	c.JSON(http.StatusOK, gin.H{"status":"success","message":message})
+	c.JSON(http.StatusOK, gin.H{"status":"success","message":"Toko Ditutup"})
 }
