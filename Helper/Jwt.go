@@ -9,7 +9,13 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var privateKey = []byte(os.Getenv("JWT_SECRET"))
+var privateKey = func() []byte {
+    key := os.Getenv("JWT_PRIVATE_KEY")
+    if key == "" {
+        panic("JWT_PRIVATE_KEY is not set in environment variables")
+    }
+    return []byte(key)
+}()
 
 func GenerateJWT(id uint) (string, error) {
     tokenTTL, err := strconv.Atoi(os.Getenv("TOKEN_TTL"))
