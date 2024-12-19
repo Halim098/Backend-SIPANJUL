@@ -82,7 +82,11 @@ func Print(c *gin.Context) {
         return
     }
 
-	divisi, _ := data["divisi"].(string)
+    divisi, ok := data["divisi"].(string)
+    if !ok || divisi == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"status": "fail", "message": "Invalid or missing 'divisi'"})
+        return
+    }
 
     selesreport, err := Controller.GetSelesReport(startdate, enddate, divisi, id)
     if err != nil {
@@ -125,3 +129,4 @@ func Print(c *gin.Context) {
     c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
     c.Data(http.StatusOK, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileBytes)
 }
+
