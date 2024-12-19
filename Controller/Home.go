@@ -19,18 +19,18 @@ func GetBestSellingItem(oprid uint) ([]Model.BestSelling, error) {
 
 	for _, v := range data {
 		var ready bool
-		if v.Product.Stock > 0 {
+		if v.Stock > 0 {
 			ready = true
 		}
-		if v.Product.Stock <= 0 {
+		if v.Stock <= 0 {
 			ready = false
 		}
 		best = append(best, Model.BestSelling{
-			ID: v.Product.ID,
-			Name: v.Product.Name,
-			Packagesize: v.Product.Packagesize,
-			Types: v.Product.Type,
-			Imageurl: v.Product.Imageurl,
+			ID: v.ID,
+			Name: v.Name,
+			Packagesize: v.Packagesize,
+			Types: v.Type,
+			Imageurl: v.Imageurl,
 			Stock: ready,
 		})
 	}

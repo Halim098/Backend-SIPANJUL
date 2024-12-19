@@ -21,6 +21,15 @@ type Sales_Detail struct {
 	Sales     Sales     `gorm:"foreignKey:SalesID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"` // Foreign key defined
 }
 
+type BestSellingDB struct {
+	ID uint `json:"id"`
+	Name string `json:"name"`
+	Stock int `json:"stock"`
+	Packagesize string `json:"packagesize"`
+	Type string `json:"type"`
+	Imageurl string `json:"imageurl"`
+}
+
 type BestSelling struct {
 	ID uint `json:"id"`
 	Name string `json:"name"`
@@ -49,7 +58,6 @@ type SalesByDate struct {
 	Division string `json:"division"`
 	Date time.Time `json:"date"`
 }
-
 
 func AddSalesDetail (data *Sales_Detail) error {
 	err := Database.Database.Create(&data)
@@ -119,8 +127,8 @@ func GetLastTransaction (oprid uint) ([]LastTransaction, error) {
 	return LastTrans, nil
 }
 
-func GetBestSellingItem(oprid uint) ([]Sales_Detail, error) {
-	var BestSelling []Sales_Detail
+func GetBestSellingItem(oprid uint) ([]BestSellingDB, error) {
+	var BestSelling []BestSellingDB
 
 	err := Database.Database.Raw(`SELECT 
 			p.id,
@@ -128,7 +136,7 @@ func GetBestSellingItem(oprid uint) ([]Sales_Detail, error) {
 			p.packagesize,
 			p.type,
 			p.imageurl,
-			p,stock
+			p.stock
 		FROM 
 			sales_details sd
 		JOIN 
@@ -138,7 +146,7 @@ func GetBestSellingItem(oprid uint) ([]Sales_Detail, error) {
 		WHERE 
 			s.opr_id = ?
 		GROUP BY 
-			p.name
+			p.id, p.name, p.packagesize, p.type, p.imageurl, p.stock
 		ORDER BY 
 			SUM(sd.quantity) DESC LIMIT 10`, oprid).Scan(&BestSelling)
 	if err.Error != nil {
