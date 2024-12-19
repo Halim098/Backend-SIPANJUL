@@ -22,7 +22,7 @@ func SetupRouter() *gin.Engine  {
 	r.POST("/register", Service.Register) // done
 	
 	//guest
-	r.GET("/product",Service.GetAllProduct)
+	r.GET("/product",Service.GetAllProduct) //done
 	r.GET("/store-status/:id",Service.GetStoreStatus) // done
 	
 	// Operator
