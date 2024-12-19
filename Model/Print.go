@@ -202,17 +202,20 @@ func DataPrint(startdate, enddate string, oprid uint) ([]Print, []PrintOut, erro
 					p.StockTambahan += o.Quantity
 				} 
 			}
-
-			if o.Action == "pengurangan" {
-				printOut = append(printOut, PrintOut{
-					Komoditi:  o.Komoditi,
-					Deskripsi: o.Description,
-					Jumlah:    o.Quantity,
-				})
-			}
 		}
 
 		print = append(print, p)
+	}
+
+	for _, v := range out {
+		if v.Action == "pengeluaran" {
+			var p PrintOut
+			p.Komoditi = v.Komoditi
+			p.Deskripsi = v.Description
+			p.Jumlah = v.Quantity
+
+			printOut = append(printOut, p)
+		}
 	}
 
 	return print, printOut, nil
