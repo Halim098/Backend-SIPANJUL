@@ -45,7 +45,7 @@ func GetReport(c *gin.Context) {
 
 		newend = newend.AddDate(0, 0, 1)
 		enddate = newend.Format("2006-01-02")
-		
+
 		data, err := Controller.GetProductReport(startdate, enddate, divisi, detail)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message": err.Error()})
@@ -80,7 +80,15 @@ func Print(c *gin.Context) {
 		return
 	}
 
-	productreport, err := Controller.GetProductReport(startdate, enddate, divisi, "")
+	newdate, err := time.Parse("2006-01-02", enddate)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message": err.Error()})
+		return
+	}
+
+	newdate = newdate.AddDate(0, 0, 1)
+	enddate2 := newdate.Format("2006-01-02")
+	productreport, err := Controller.GetProductReport(startdate, enddate2, divisi, "")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"status":"fail","message": err.Error()})
 		return
