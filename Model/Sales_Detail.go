@@ -84,8 +84,7 @@ func GetSalesDetailbySalesandDate (idsales uint,sartdate,endate string) ([]Sales
         products p ON sd.prod_id = p.id
     WHERE 
         s.id = ? AND 
-        s.date >= ? AND s.date < ? AND
-        p.active = ?`, idsales, sartdate, endate, "true").Scan(&Sales)
+        s.date >= ? AND s.date < ?`, idsales, sartdate, endate).Scan(&Sales)
 	if err.Error != nil {
 		return Sales, err.Error
 	}
