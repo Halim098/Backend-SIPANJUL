@@ -82,8 +82,10 @@ func GetSalesDetailbySalesandDate (idsales uint,sartdate,endate string) ([]Sales
         sales s ON sd.sales_id = s.id
     JOIN 
         products p ON sd.prod_id = p.id
+    JOIN 
+        operators o ON s.opr_id = o.id
     WHERE 
-        s.id = ? AND 
+        s.opr_id = ? AND 
         s.date >= ? AND s.date < ?`, idsales, sartdate, endate).Scan(&Sales)
 	if err.Error != nil {
 		return Sales, err.Error
