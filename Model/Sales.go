@@ -26,3 +26,13 @@ func AddSales (data *Sales) error {
 	}
 	return nil
 }
+
+func Get1lasttransaction () (uint, error) {
+	var data Sales
+	err := Database.Database.Last(&data)
+	if err.Error != nil {
+		return 0, err.Error
+	}
+	return data.ID, nil
+
+}
