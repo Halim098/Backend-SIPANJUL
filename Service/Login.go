@@ -88,7 +88,7 @@ func GetStoreStatus(c *gin.Context)  {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"statua":"success","storestatus":data})
+	c.JSON(http.StatusOK, gin.H{"status":"success","storestatus":data})
 }
 
 func UpdateStoreStatus(c *gin.Context)  {

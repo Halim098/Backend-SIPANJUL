@@ -33,7 +33,7 @@ func GetReport(c *gin.Context) {
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"status":"success","message": data})
+		c.JSON(http.StatusOK, gin.H{"status":"success","message":"Berhasil Mengambil Data Laporan Penjualan","data": data})
 		return
 	}
 
@@ -53,7 +53,7 @@ func GetReport(c *gin.Context) {
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"status":"success","message": data})
+		c.JSON(http.StatusOK, gin.H{"status":"success","message":"Berhasil Mengambil Data Laporan Perubahan Stock","data": data})
 		return
 	}
 

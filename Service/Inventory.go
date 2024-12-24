@@ -119,7 +119,8 @@ func GetProductBYOpr(c *gin.Context)  {
 
 	c.JSON(http.StatusOK, gin.H{
 			"status":"success",
-			"message" : produk,
+			"message":"Berhasil Mengambil Data Produk",
+			"data" : produk,
 		},
 	)
 }
@@ -146,7 +147,8 @@ func GetProductByID(c *gin.Context){
 
 	c.JSON(http.StatusOK,gin.H{
 		"status":"success",
-		"message": product,
+		"message":"Berhasil Mengambil Data Produk",
+		"data": product,
 	})
 }
 
@@ -159,7 +161,8 @@ func GetAllProduct(c *gin.Context)  {
 
 	c.JSON(http.StatusOK,gin.H{
 		"status":"success",
-		"message": data,
+		"message":"Berhasil Mengambil Data Produk",
+		"data": data,
 	})
 }
 

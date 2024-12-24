@@ -16,7 +16,7 @@ func GetLastTransaction(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK,gin.H{"status":"success", "message":data})
+	c.JSON(http.StatusOK,gin.H{"status":"success", "message":"Berhasil Mengambil Data Transaksi", "data":data})
 }
 
 func GetBestSellingItem(c *gin.Context) {
@@ -28,5 +28,5 @@ func GetBestSellingItem(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK,gin.H{"status":"success", "message":data})
+	c.JSON(http.StatusOK,gin.H{"status":"success", "message":"Berhasil Mengambil Data Best Selling Items", "data":data})
 }

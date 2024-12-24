@@ -18,7 +18,8 @@ func Statistik(c *gin.Context) {
 
 	c.JSON(http.StatusOK,gin.H{
 		"satatus":"success",
-		"message":gin.H{
+		"message":"Berhasil Mengambil Data Statistik",
+		"data":gin.H{
 			"harian":harian,
 			"mingguan":mingguan,
 			"bulanan":bulanan,

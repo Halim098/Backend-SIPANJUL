@@ -30,7 +30,8 @@ func GetSalesReport(c *gin.Context) {
 	
 	c.JSON(http.StatusOK, gin.H{
 		"status": "success",
-		"message": gin.H{
+		"message": "Berhasil Mengambil Data Rangkuman Pemjualan",
+		"data": gin.H{
 			"harian":   harian,
 			"mingguan": mingguan,
 			"bulanan":  bulanan,
