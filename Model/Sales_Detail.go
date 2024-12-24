@@ -128,8 +128,13 @@ func GetLastTransaction (oprid uint) ([]LastTransaction, error) {
 	return LastTrans, nil
 }
 
-func GetBestSellingItem(oprid uint) ([]BestSellingDB, error) {
+func GetBestSellingItemWeekly(oprid uint) ([]BestSellingDB, error) {
 	var BestSelling []BestSellingDB
+
+	timeNow := time.Now()
+
+	stratdate := timeNow.AddDate(0, 0, -7).Format("2006-01-02")
+	enddate := timeNow.AddDate(0, 0, 1).Format("2006-01-02")
 
 	err := Database.Database.Raw(`SELECT 
 			p.id,
@@ -145,11 +150,52 @@ func GetBestSellingItem(oprid uint) ([]BestSellingDB, error) {
 		JOIN 
 			sales s ON sd.sales_id = s.id
 		WHERE 
-			s.opr_id = ?
+			s.opr_id = ? AND
+			s.date >= ? AND s.date < ?
 		GROUP BY 
 			p.id, p.name, p.packagesize, p.type, p.imageurl, p.stock
 		ORDER BY 
-			SUM(sd.quantity) DESC LIMIT 10`, oprid).Scan(&BestSelling)
+			SUM(sd.quantity) DESC LIMIT 10`, oprid,stratdate, enddate).Scan(&BestSelling)
+	if err.Error != nil {
+		return BestSelling, err.Error
+	}
+
+	if err.RowsAffected == 0 {
+		return BestSelling, errors.New("data tidak ditemukan")
+	}
+
+	return BestSelling, nil
+}
+
+
+func GetBestSellingItemMonthly(oprid uint) ([]BestSellingDB, error) {
+	var BestSelling []BestSellingDB
+
+	timeNow := time.Now()
+
+	stratdate := timeNow.AddDate(0, -1, 0).Format("2006-01-02")
+	enddate := timeNow.AddDate(0, 0, 1).Format("2006-01-02")
+
+	err := Database.Database.Raw(`SELECT 
+			p.id,
+			p.name,
+			p.packagesize,
+			p.type,
+			p.imageurl,
+			p.stock
+		FROM 
+			sales_details sd
+		JOIN 
+			products p ON sd.prod_id = p.id
+		JOIN 
+			sales s ON sd.sales_id = s.id
+		WHERE 
+			s.opr_id = ? AND
+			s.date >= ? AND s.date < ?
+		GROUP BY 
+			p.id, p.name, p.packagesize, p.type, p.imageurl, p.stock
+		ORDER BY 
+			SUM(sd.quantity) DESC LIMIT 10`, oprid,stratdate, enddate).Scan(&BestSelling)
 	if err.Error != nil {
 		return BestSelling, err.Error
 	}
