@@ -56,9 +56,9 @@ func (o *Operator) Save() error {
 	}
 
 	o.CreatedAt = time.Now()
-    o.Status = true
+    o.Status = false
 
-	err = Database.Database.Exec("INSERT INTO operators (name, password, created_at) VALUES (?, ?, ?)", o.Name, o.Password, o.CreatedAt).Error
+	err = Database.Database.Exec("INSERT INTO operators (name, password, created_at, status) VALUES (?, ?, ?, ?)", o.Name, o.Password, o.CreatedAt, o.Status).Error
 	if err != nil {
 		return errors.New("failed to create user")
 	}
