@@ -56,7 +56,7 @@ func (o *Operator) Save() error {
 	}
 
 	o.CreatedAt = time.Now()
-    o.Status = false
+    o.Status = true
 
 	err = Database.Database.Exec("INSERT INTO operators (name, password, created_at) VALUES (?, ?, ?)", o.Name, o.Password, o.CreatedAt).Error
 	if err != nil {
