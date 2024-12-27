@@ -94,9 +94,9 @@ func GenerateExcelPenjualan(data []Model.Print, dataOut []Model.PrintOut ) ([]by
 	f.MergeCell(sheet, "J2", "J4")
 	f.SetCellValue(sheet, "J2", "Stok Akhir")
 
+ no := 1
 	// Tambahkan data produk
 	for i, product := range data {
-		no := 1
 		row := i + 5
 		f.SetCellValue(sheet, fmt.Sprintf("A%d", row), no)
 		f.SetCellValue(sheet, fmt.Sprintf("B%d", row), product.Komoditi)

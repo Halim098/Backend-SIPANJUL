@@ -18,6 +18,14 @@ func SetupRouter() *gin.Engine  {
 		ExposeHeaders: []string{"Content-Length"},
 	}))
 
+	// Menangani preflight request di seluruh route
+	r.OPTIONS("/*path", func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Authorization, Content-Type")
+		c.Writer.WriteHeader(200)
+	})
+
 	r.POST("/login", Service.Login) // done
 	r.POST("/register", Service.Register) // done
 	

@@ -14,6 +14,12 @@ var privateKey = []byte(os.Getenv("JWT_SECRET"))
 
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Tangani preflight request
+		if c.Request.Method == http.MethodOptions {
+			c.AbortWithStatus(http.StatusOK)
+			return
+		}
+		
 		tokenString := c.Request.Header.Get("Authorization")
 		if tokenString == "" || !strings.HasPrefix(tokenString, "Bearer ") {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
